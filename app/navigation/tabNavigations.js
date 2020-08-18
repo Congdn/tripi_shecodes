@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons  from '@expo/vector-icons/Ionicons';
+import {Ionicons,FontAwesome}  from '@expo/vector-icons';
 import { HomeTab,CashbackTab,ExtentionTab,UserTab } from './stackNavigations';
 import React from 'react';
 
@@ -14,15 +14,23 @@ export default function TabNavigation() {
                   let iconName;
       
                   if (route.name === 'Home') {
-                    iconName = focused
-                      ? 'ios-home'
-                      : 'home-outline';
-                  } else if (route.name === 'Settings') {
-                    iconName = focused ? 'ios-list-box' : 'ios-list';
+                    /* iconName = focused
+                      ? 'home'
+                      : 'md-checkmark-circle'; */
+                      iconName = 'home';
+                  } else if (route.name === 'Cashback') {
+                    /* iconName = focused ? 'ios-list-box' : 'ios-list'; */
+                    iconName = 'credit-card-alt';
+                  }
+                  else if(route.name === 'Extention'){
+                    iconName = 'external-link';
+                  }
+                  else{
+                    iconName = 'user-circle';
                   }
       
                   // You can return any component that you like here!
-                  return <Ionicons name={iconName} size={size} color={color} />;
+                  return <FontAwesome name={iconName} size={size} color={color} />;
                 },
               })}
               tabBarOptions={{

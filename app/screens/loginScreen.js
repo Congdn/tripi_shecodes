@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LoginAction } from '../../redux/actions/userActions';
+import { LoginAction } from '../redux/actions/userActions';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 
 export default function LoginScreen() {
@@ -14,7 +14,7 @@ export default function LoginScreen() {
     }
     return (
         <View>
-            <Image source={require('../../assets/images/background.png')}
+            <Image source={require('../assets/images/background.png')}
             style={{width:'100%',
             height:'100%'
             }} />
@@ -28,7 +28,7 @@ export default function LoginScreen() {
             }}>
                 <Image
                     style={{ width: 250, height: 250, borderRadius: 999 }}
-                    source={require('../../assets/images/user-type-the-shy-user.png')} />
+                    source={require('../assets/images/user-type-the-shy-user.png')} />
                 <Text style={{ color: '#fff', marginTop: 30 }}>{loginstatus == 0 ? "Đăng nhập không thành công" : ""}</Text>
                 <TextInput
                     style={{

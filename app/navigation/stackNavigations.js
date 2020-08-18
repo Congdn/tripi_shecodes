@@ -1,17 +1,16 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import HomeScreen from '../components/home/homeScreen';
-import PaymentScreen from '../components/payment/paymentScreen';
-import HotelScreen from '../components/hotel/hotelScreen';
+import HomeScreen from '../screens/homeScreen';
+import PaymentScreen from '../screens/paymentScreen';
+import HotelScreen from '../screens/hotelScreen';
 
-import CashbackScreen from '../components/cashback/cashbackScreen';
+import CashbackScreen from '../screens/cashbackScreen';
 
-import ExtentionScreen from '../components/extentions/extentionScreen';
+import ExtentionScreen from '../screens/extentionScreen';
 
-import UserScreen from '../components/user/userScreen';
+import UserScreen from '../screens/userScreen';
 
-//import { LoginScreen, HomeScreen, HotelScreen, PaymentScreen, UserScreen } from '../screens';
 
 const HomeStack = createStackNavigator();
 export function HomeTab() {

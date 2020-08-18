@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { View, Text,TouchableOpacity } from 'react-native';
-import {LogoutAction} from '../../redux/actions/userActions';
+import {LogoutAction} from '../redux/actions/userActions';
 
 export default function HomeScreen() {
     const dispatch = useDispatch();

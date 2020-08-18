@@ -1,10 +1,10 @@
 import React from 'react';
-import LoginScreen from './components/login/loginScreen';
+import LoginScreen from './screens/loginScreen';
 import {useSelector} from 'react-redux';
 import TabNavigation from './navigation/tabNavigations';
 
 export default function Main(){
-    const loginstatus = useSelector(state => state.loginstatus);
+    /* const loginstatus = useSelector(state => state.loginstatus);
     return loginstatus > 0 ?
     (
         <TabNavigation></TabNavigation>
@@ -12,5 +12,6 @@ export default function Main(){
     :
     (
         <LoginScreen></LoginScreen>
-    )
+    ) */
+    return <TabNavigation></TabNavigation>;
 }
