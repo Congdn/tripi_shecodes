@@ -1,7 +1,7 @@
 import React from 'react';
-import LoginScreen from './screens/loginScreen';
+import LoginScreen from './screens/LoginScreen';
 import {useSelector} from 'react-redux';
-import TabNavigation from './navigation/tabNavigations';
+import TabNavigation from './navigation/TabNavigations';
 
 export default function Main(){
     /* const loginstatus = useSelector(state => state.loginstatus);

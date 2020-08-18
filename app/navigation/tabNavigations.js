@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {Ionicons,FontAwesome}  from '@expo/vector-icons';
-import { HomeTab,CashbackTab,ExtentionTab,UserTab } from './stackNavigations';
+import { HomeTab,CashbackTab,ExtentionTab,UserTab } from './StackNavigations';
 import React from 'react';
 
 const Tab = createBottomTabNavigator();
@@ -23,22 +23,21 @@ export default function TabNavigation() {
                     iconName = 'credit-card-alt';
                   }
                   else if(route.name === 'Extention'){
-                    iconName = 'external-link';
+                    iconName = 'plus-square';
                   }
                   else{
                     iconName = 'user-circle';
                   }
-      
-                  // You can return any component that you like here!
+
                   return <FontAwesome name={iconName} size={size} color={color} />;
-                },
+                }
               })}
               tabBarOptions={{
                 activeTintColor: '#fc5c65',
                 inactiveTintColor: '#0c0c0c',
               }}
             >
-                <Tab.Screen name="Home" component={HomeTab}  />
+                <Tab.Screen name="Home" component={HomeTab} />
                 <Tab.Screen name="Cashback" component={CashbackTab} />
                 <Tab.Screen name="Extention" component={ExtentionTab} />
                 <Tab.Screen name="User" component={UserTab} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LoginAction } from '../redux/actions/userActions';
+import { LoginAction } from '../redux/actions/UserActions';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 
 export default function LoginScreen() {
