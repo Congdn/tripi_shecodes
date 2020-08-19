@@ -4,6 +4,7 @@ import { View, Text,TouchableOpacity,ScrollView } from 'react-native';
 import {LogoutAction} from '../redux/actions/UserActions';
 import MainStyle from '../stylesheets/MainStyle';
 import UserInfo from '../components/home/UserInfo';
+import HotelBox from '../components/home/HotelBox';
 
 export default function HomeScreen() {
     const dispatch = useDispatch();
@@ -14,6 +15,7 @@ export default function HomeScreen() {
     return (
         <ScrollView>
             <UserInfo />
+            <HotelBox title="Deal hot"></HotelBox>
         </ScrollView>
     )
 }

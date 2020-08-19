@@ -41,7 +41,7 @@ const MainStyle = StyleSheet.create({
         flexDirection:'row'
     },
     FontSize:{
-        fontSize:14
+        fontSize:12
     },
     WhiteText:{
         color:'#fff',
