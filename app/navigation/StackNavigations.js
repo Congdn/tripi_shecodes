@@ -7,15 +7,17 @@ import HotelScreen from '../screens/HotelScreen';
 import CashbackScreen from '../screens/CashbackScreen';
 import ExtentionScreen from '../screens/ExtentionScreen';
 import UserScreen from '../screens/UserScreen';
+import SearchScreen from '../screens/SearchScreen';
 
 import { View, Text, Alert } from 'react-native';
 import MainStyle from '../stylesheets/MainStyle';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons';
+import Colors from '../commons/Colors';
 
 const HomeStack = createStackNavigator();
 
-const HomeOptions = {
+const HomeOptions = (props)=>({
     title: 'SHECODES',
     headerStyle: {
         backgroundColor: '#fff',
@@ -29,7 +31,9 @@ const HomeOptions = {
         <View style={{flexDirection:'row',marginRight:10}}>
             <TouchableOpacity
                 onPress={() => {
-                    Alert.alert("Thông báo", "Searching...")
+                    props.navigation.navigate("Search");
+                    //console.log(p);
+                    //Alert.alert("Thông báo", "Searching...")
                 }}>
                 <FontAwesome name="search" size={26} color="#fc5c65" />
             </TouchableOpacity>
@@ -42,7 +46,14 @@ const HomeOptions = {
             </TouchableOpacity>
         </View>
     )
-}
+})
+const SearchOptions =(props)=>({
+    title:'Tìm kiếm',
+    headerTitleStyle: {
+        fontSize: 20,
+        color: Colors.Primary
+    },
+})
 const CashbackOptions ={}
 const ExtentionOptions ={}
 const UserOptions ={}
@@ -54,6 +65,9 @@ export function HomeTab() {
         <HomeStack.Navigator>
             <HomeStack.Screen name="Home" component={HomeScreen}
                 options={HomeOptions}
+            />
+            <HomeStack.Screen name="Search" component={SearchScreen}
+                options={SearchOptions}
             />
             <HomeStack.Screen name="Hotel" component={HotelScreen} />
             <HomeStack.Screen name="Payment" component={PaymentScreen} />
