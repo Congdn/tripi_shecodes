@@ -6,7 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function SearchScreen() {
+export default function SearchScreen(props) {
   const [date, setDate] = React.useState(new Date());
   const [dateShow, setDateShow] = React.useState(false);
 
@@ -26,10 +26,12 @@ export default function SearchScreen() {
           <View style={SearchStyle.searchIcon}>
             <FontAwesome name="search" size={24} color="#fc5c65" />
           </View>
-          <TextInput
-            style={SearchStyle.searchInput}
-            placeholder="Nơi đến"
-          ></TextInput>
+          <TouchableOpacity
+            onPress={()=>props.navigation.navigate("Location")}
+            style={SearchStyle.btnSelectLocation}
+          >
+              <Text style={SearchStyle.btnSelectLocationDetail}>Nơi đến</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={SearchStyle.searchItem}>
@@ -61,7 +63,7 @@ export default function SearchScreen() {
           </View>
           <TextInput
             style={SearchStyle.searchInput}
-            placeholder="Nơi đến"
+            placeholder="Số lượng"
           ></TextInput>
         </View>
       </View>
