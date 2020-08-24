@@ -7,17 +7,31 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function SearchScreen(props) {
-  const [date, setDate] = React.useState(new Date());
-  const [dateShow, setDateShow] = React.useState(false);
+  const [sDate, setSDate] = React.useState(new Date());
+  const [eDate, setEDate] = React.useState(new Date());
+  const [sDateShow, setSDateShow] = React.useState(false);
+  const [eDateShow, setEDateShow] = React.useState(false);
 
-  const dateOnChange = (event, selectedDate) => {
+  console.log(sDate);
+  const sDateOnChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setDateShow(false);
-    setDate(currentDate);
+    setSDateShow(false);
+    setSDate(currentDate);
     //console.log(date);
   };
-  const showDateTime = () => {
-    setDateShow(true);
+  const eDateOnChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setEDateShow(false);
+    setEDate(currentDate);
+
+
+    //console.log(date);
+  };
+  const showSDateTime = () => {
+    setSDateShow(true);
+  };
+  const showESDateTime = () => {
+    setEDateShow(true);
   };
   return (
     <View style={SearchStyle.container}>
@@ -40,18 +54,33 @@ export default function SearchScreen(props) {
             <FontAwesome name="calendar" size={24} color="#fc5c65" />
           </View>
           <TouchableOpacity
-            onPress={showDateTime}
+            onPress={showSDateTime}
             style={SearchStyle.btnShowDate}
           >
-              <Text style={SearchStyle.btnShowDateDetail}>Chọn ngày</Text>
+              <Text style={SearchStyle.btnShowDateDetail}>Từ ngày</Text>
           </TouchableOpacity>
-          {dateShow && (
+          <TouchableOpacity
+            onPress={showESDateTime}
+            style={SearchStyle.btnShowDate}
+          >
+              <Text style={SearchStyle.btnShowDateDetail}>Đến ngày</Text>
+          </TouchableOpacity>
+          {sDateShow && (
             <DateTimePicker
               testID="dateTimePicker"
-              value={date}
+              value={sDate}
               is24Hour={true}
               display="default"
-              onChange={dateOnChange}
+              onChange={sDateOnChange}
+            />
+          )}
+          {eDateShow && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={eDate}
+              is24Hour={true}
+              display="default"
+              onChange={eDateOnChange}
             />
           )}
         </View>
