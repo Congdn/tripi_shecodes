@@ -1,8 +1,7 @@
 import React from 'react';
-import {View,Text,Image} from 'react-native';
+import {View,Text,Image,TouchableOpacity} from 'react-native';
 import MainStyle from '../../stylesheets/MainStyle';
 import HomeStyle from '../../stylesheets/HomeStyle';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function HotelItem(props){
     return (

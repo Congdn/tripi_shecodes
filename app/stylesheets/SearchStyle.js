@@ -28,7 +28,7 @@ const SearchStyle = StyleSheet.create({
     paddingVertical: 5,
     fontSize: 16,
   },
-  btnSelectLocation: {
+  btnSelect: {
     paddingLeft: 10,
     paddingVertical: 5,
     fontSize: 16,
@@ -37,7 +37,7 @@ const SearchStyle = StyleSheet.create({
     height: 45,
     backgroundColor: Colors.White,
   },
-  btnSelectLocationDetail: {
+  btnSelectDetail: {
     textAlign: "left",
     color: "#c8c8c8",
     fontSize: 16,
@@ -99,6 +99,37 @@ const SearchStyle = StyleSheet.create({
   },
   LocHisResult:{
     color: "#6e6969" 
+  },
+  QuatityPopup:{
+    flex:1,
+    flexDirection:'column',
+    margin:30,
+  },
+  QuatityItem:{
+    flex:1,
+    flexDirection:'row',
+    alignItems:'center',
+    marginTop:10,
+    borderTopColor:Colors.Medium,
+    borderTopWidth:1,
+
+  },
+  QuatityItemTitle:{
+    flex:0.7,
+    fontSize:16,
+  },
+  QuatityItemSelect:{
+    flex:0.3,
+    fontSize:16,
+    flexDirection:'row',
+    justifyContent:'space-around'
+  },
+  QuatityBtnSelectBox:{
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  QuatityBtnSelect:{
+    width:'30%'
   }
 });
 export default SearchStyle;

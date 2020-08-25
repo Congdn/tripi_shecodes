@@ -1,9 +1,8 @@
 import React from "react";
-import { View, Text, TextInput, Button, Alert } from "react-native";
+import { View, Text, TextInput, Button, Alert,TouchableOpacity } from "react-native";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import MainStyle from "../stylesheets/MainStyle";
 import SearchStyle from "../stylesheets/SearchStyle";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function LocationScreen() {
   return (

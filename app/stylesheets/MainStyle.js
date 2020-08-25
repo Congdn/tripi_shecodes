@@ -59,6 +59,12 @@ const MainStyle = StyleSheet.create({
     },
     Margin10:{
         marginTop:10
+    },
+    BtnPrimary:{
+        paddingVertical:10,
+        paddingHorizontal:20,
+        borderRadius:10,
+        backgroundColor:Colors.Primary
     }
 })
 export default MainStyle;
