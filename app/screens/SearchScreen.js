@@ -6,8 +6,14 @@ import { FontAwesome } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RBSheet from "react-native-raw-bottom-sheet";
 import Colors from "../commons/Colors";
+import Moment from 'moment';
 
 export default function SearchScreen(props) {
+  const [locationTitle, setLocationTitle] = React.useState("");
+  const [fromDateTitle, setFromDateTitle] = React.useState("");
+  const [toDateTitle, setToDateTitle] = React.useState("");
+  const [quatityTitle, setQuatityTitle] = React.useState("");
+  
   const [sDate, setSDate] = React.useState(new Date());
   const [eDate, setEDate] = React.useState(new Date());
   const [sDateShow, setSDateShow] = React.useState(false);
@@ -16,21 +22,27 @@ export default function SearchScreen(props) {
   const [adultsQuatity, setAdultsQuatity] = React.useState(0);
   const [childrenQuatity, setChildrenQuatity] = React.useState(0);
 
+  const refRBSheet = React.useRef();
 
-  console.log(sDate);
   const sDateOnChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
     setSDateShow(false);
+    if(event.type === "dismissed")
+      return;
+    const currentDate = selectedDate || date;
     setSDate(currentDate);
-    //console.log(date);
+    setFromDateTitle(Moment(currentDate).format("DD/MM/yyyy"));
   };
   const eDateOnChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
     setEDateShow(false);
+    if(event.type === "dismissed")
+      return;
+    const currentDate = selectedDate || date;
+    if(selectedDate < sDate){
+      Alert.alert("Không thể chọn","Ngày trả phòng phải lớn hơn hoặc bằng ngày nhận phòng");
+      return;
+    }
     setEDate(currentDate);
-
-
-    //console.log(date);
+    setToDateTitle(Moment(currentDate).format("DD/MM/yyyy"));
   };
   const showSDateTime = () => {
     setSDateShow(true);
@@ -46,10 +58,12 @@ export default function SearchScreen(props) {
             <FontAwesome name="search" size={24} color="#fc5c65" />
           </View>
           <TouchableOpacity
-            onPress={() => props.navigation.navigate("Location")}
+            onPress={() => props.navigation.navigate("Location",{
+              setlocation:setLocationTitle
+            })}
             style={SearchStyle.btnSelect}
           >
-            <Text style={SearchStyle.btnSelectDetail}>Nơi đến</Text>
+            <Text style={SearchStyle.btnSelectDetail}>{locationTitle === "" ? "Nơi đến" : locationTitle}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -62,13 +76,13 @@ export default function SearchScreen(props) {
             onPress={showSDateTime}
             style={SearchStyle.btnShowDate}
           >
-            <Text style={SearchStyle.btnShowDateDetail}>Từ ngày</Text>
+            <Text style={SearchStyle.btnShowDateDetail}>{fromDateTitle === "" ? "Từ ngày" : fromDateTitle}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={showESDateTime}
             style={SearchStyle.btnShowDate}
           >
-            <Text style={SearchStyle.btnShowDateDetail}>Đến ngày</Text>
+            <Text style={SearchStyle.btnShowDateDetail}>{toDateTitle === "" ? "Đến ngày" : toDateTitle}</Text>
           </TouchableOpacity>
           {sDateShow && (
             <DateTimePicker
@@ -96,15 +110,13 @@ export default function SearchScreen(props) {
             <FontAwesome name="users" size={24} color="#fc5c65" />
           </View>
           <TouchableOpacity
-            onPress={() => this.RBSheet.open()}
+            onPress={() => refRBSheet.current.open()}
             style={SearchStyle.btnSelect}
           >
-            <Text style={SearchStyle.btnSelectDetail}>Số lượng</Text>
+            <Text style={SearchStyle.btnSelectDetail}>{quatityTitle === "" ? "Số lượng" : quatityTitle}</Text>
           </TouchableOpacity>
           <RBSheet
-            ref={ref => {
-              this.RBSheet = ref;
-            }}
+            ref={refRBSheet}
             height={260}
             openDuration={250}
             >
@@ -113,11 +125,23 @@ export default function SearchScreen(props) {
             <View style={SearchStyle.QuatityItem}>
               <Text style={SearchStyle.QuatityItemTitle}>Số phòng</Text>
               <View style={SearchStyle.QuatityItemSelect}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{
+                  setZoomQuatity(zoomQuatity - 1);
+                }}
+                disabled={zoomQuatity <= 0 ? true : false}
+                style={{
+                  opacity:zoomQuatity <= 0 ? 0.5 : 1
+                }}
+                >
                   <FontAwesome name="minus-circle" size={28} color="#000000" />
                 </TouchableOpacity>
                 <Text style={{fontSize:16}}>{zoomQuatity}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{
+                  setZoomQuatity(zoomQuatity + 1);
+                }}
+                >
                   <FontAwesome name="plus-circle" size={28} color="#fc5c65" />
                 </TouchableOpacity>
               </View>
@@ -125,11 +149,23 @@ export default function SearchScreen(props) {
             <View style={SearchStyle.QuatityItem}>
               <Text style={SearchStyle.QuatityItemTitle}>Người lớn</Text>
               <View style={SearchStyle.QuatityItemSelect}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{
+                  setAdultsQuatity(adultsQuatity - 1);
+                }}
+                disabled={adultsQuatity <= 0 ? true : false}
+                style={{
+                  opacity:adultsQuatity <= 0 ? 0.5 : 1
+                }}
+                >
                   <FontAwesome name="minus-circle" size={28} color="#000000" />
                 </TouchableOpacity>
                 <Text style={{fontSize:16}}>{adultsQuatity}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{
+                  setAdultsQuatity(adultsQuatity + 1);
+                }}
+                >
                   <FontAwesome name="plus-circle" size={28} color="#fc5c65" />
                 </TouchableOpacity>
               </View>
@@ -137,18 +173,33 @@ export default function SearchScreen(props) {
             <View style={SearchStyle.QuatityItem}>
               <Text style={SearchStyle.QuatityItemTitle}>Trẻ em</Text>
               <View style={SearchStyle.QuatityItemSelect}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{
+                  setChildrenQuatity(childrenQuatity - 1);
+                }}
+                disabled={childrenQuatity <= 0 ? true : false}
+                style={{
+                  opacity:childrenQuatity <= 0 ? 0.5 : 1
+                }}
+                >
                   <FontAwesome name="minus-circle" size={28} color="#000000" />
                 </TouchableOpacity>
                 <Text style={{fontSize:16}}>{childrenQuatity}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{
+                  setChildrenQuatity(childrenQuatity + 1);
+                }}
+                >
                   <FontAwesome name="plus-circle" size={28} color="#fc5c65" />
                 </TouchableOpacity>
               </View>
             </View>
             <View style={SearchStyle.QuatityBtnSelectBox}>
               <TouchableOpacity
-              onPress={()=> this.RBSheet.close()}
+              onPress={()=> {
+                setQuatityTitle(`Số phòng: ${zoomQuatity} - Người lớn: ${adultsQuatity} - Trẻ em: ${childrenQuatity}`);
+                refRBSheet.current.close();
+              }}
               style={[MainStyle.BtnPrimary,SearchStyle.QuatityBtnSelect]}>
                 <Text style={MainStyle.WhiteText}>Lựa chọn</Text>
               </TouchableOpacity>

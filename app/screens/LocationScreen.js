@@ -4,7 +4,8 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import MainStyle from "../stylesheets/MainStyle";
 import SearchStyle from "../stylesheets/SearchStyle";
 
-export default function LocationScreen() {
+export default function LocationScreen(props) {
+  const routeParams = props.route.params;
   return (
     <View style={SearchStyle.location}>
       <TouchableOpacity
@@ -12,6 +13,10 @@ export default function LocationScreen() {
           SearchStyle.btnBoxLocation,
           { flexDirection: "row", alignItems: "center" },
         ]}
+        onPress={()=>{
+          routeParams.setlocation("Thanh Xuân");
+          props.navigation.pop();
+        }}
       >
         <MaterialIcons name="my-location" size={34} color="#fc5c65" />
         <View style={SearchStyle.btnCurrentLocRight}>
