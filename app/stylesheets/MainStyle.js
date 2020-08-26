@@ -6,7 +6,8 @@ const MainStyle = StyleSheet.create({
         paddingLeft:10,
         paddingRight:10,
         paddingTop:20,
-        paddingBottom:10
+        paddingBottom:10,
+        backgroundColor:Colors.Light
     },
     H1:{
         fontSize:28,
