@@ -9,6 +9,7 @@ import ExtentionScreen from "../screens/ExtentionScreen";
 import UserScreen from "../screens/UserScreen";
 import SearchScreen from "../screens/SearchScreen";
 import LocationScreen from "../screens/LocationScreen";
+import ListHotelScreen from "../screens/ListHotelScreen";
 
 import { View, Text, Alert, TextInput, TouchableOpacity } from "react-native";
 import MainStyle from "../stylesheets/MainStyle";
@@ -50,9 +51,9 @@ const HomeOptions = (props) => ({
   ),
 });
 const SearchOptions = (props) => ({
-  title: "Tìm kiếm",
+  title: "Home",
   headerTitleStyle: {
-    fontSize: 20,
+    fontSize: 16,
     color: Colors.Primary,
   },
 });
@@ -63,15 +64,22 @@ const LocationOptions = (props) => ({
       <TextInput
         style={{
           backgroundColor: Colors.Light,
-          paddingLeft:10,
-          paddingVertical:4,
-          borderRadius:10
+          paddingLeft: 10,
+          paddingVertical: 4,
+          borderRadius: 10
         }}
         placeholder="Nhập nơi đến"
       ></TextInput>
     </View>
   ),
 });
+const ListHotelOptions = (props) => ({
+  title: "Tìm kiếm",
+  headerTintColor: Colors.Primary,
+  headerTitleStyle: {
+    fontSize:16
+  },
+})
 const CashbackOptions = {};
 const ExtentionOptions = {};
 const UserOptions = {};
@@ -95,6 +103,11 @@ export function HomeTab() {
         name="Location"
         component={LocationScreen}
         options={LocationOptions}
+      />
+      <HomeStack.Screen
+        name="ListHotel"
+        component={ListHotelScreen}
+        options={ListHotelOptions}
       />
       <HomeStack.Screen name="Hotel" component={HotelScreen} />
       <HomeStack.Screen name="Payment" component={PaymentScreen} />

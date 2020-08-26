@@ -212,7 +212,8 @@ export default function SearchScreen(props) {
         <TouchableOpacity
           style={SearchStyle.btnSearch}
           onPress={() => {
-            Alert.alert("Thông báo", "Searching...")
+            props.navigation.navigate("ListHotel");
+            //Alert.alert("Thông báo", "Searching...")
           }}
         >
           <Text style={SearchStyle.btnSearchText}>Tìm kiếm</Text>
