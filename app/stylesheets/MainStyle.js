@@ -45,7 +45,7 @@ const MainStyle = StyleSheet.create({
         fontSize:12
     },
     WhiteText:{
-        color:'#fff',
+        color:Colors.White,
         backgroundColor:Colors.Primary
     },
     BlackText:{

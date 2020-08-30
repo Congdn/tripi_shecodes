@@ -56,7 +56,7 @@ export default function HotelBox(props) {
         data={DATA}
         style={HomeStyle.HotelBoxListItems}
         keyExtractor={(item) => item.id}
-        renderItem={(item) => <HotelItem image={item.image}></HotelItem>}
+        renderItem={(item) => <HotelItem image={item.image} nav={props.nav}></HotelItem>}
       />
     </View>
   );

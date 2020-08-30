@@ -4,16 +4,18 @@ import MainStyle from "./MainStyle";
 
 const ListHotelStyle = StyleSheet.create({
     Header:{
-        flex:1,
         flexDirection:'row',
     },
     HeaderLeftBox:{
-        flex: 0.8,
+        width:'80%',
         flexDirection:'row'
     },
     HeaderRightBox:{
-        flex: 0.2,
+        width:'20%',
         flexDirection:'row',
+    },
+    ListType:{
+        padding:7
     },
     HeaderLeftItem:{
         flexDirection:'row',
@@ -23,6 +25,116 @@ const ListHotelStyle = StyleSheet.create({
         paddingVertical:5,
         paddingHorizontal:10,
         borderRadius:5
+    },
+
+    HotelItemBox:{
+        marginTop:10,
+        borderRadius:10,
+        maxHeight:140,
+        backgroundColor:Colors.White,
+        flexDirection:'row'
+    },
+    ItemImage:{
+        width:100,
+        height:140,
+        borderTopLeftRadius:10,
+        borderBottomLeftRadius:10
+    },
+    ItemContent:{
+        padding:10
+    },
+    ItemTitle:{
+        fontSize:20,
+        fontWeight:'bold'
+    },
+    ItemLocationBox:{
+        flexDirection:'row',
+        marginTop:5
+    },
+    ItemLocationText:{
+        fontSize:10,
+        marginLeft:2
+    },
+    ItemScopeBox:{
+        flexDirection:'row',
+        width:'44%',
+        marginTop:5,
+        justifyContent:'space-between'
+    },
+    ItemAverage:{
+        padding:2,
+        borderRadius:5
+    },
+    ItemSupplier:{
+        flexDirection:'row',
+        paddingLeft:'24%'
+    },
+    ItemSupplierDropBox:{
+        flexDirection:'row',
+        marginLeft:5,
+        backgroundColor:Colors.Gray,
+        paddingVertical:2,
+        paddingLeft:10,
+        borderRadius:20,
+    },
+    ItemSupplierTitle:{
+        color:Colors.Dark,
+        fontWeight:'bold'
+    },
+    ItemPrice:{
+        fontSize:20,
+        fontWeight:'bold',
+        color:Colors.Danger,
+        textAlign:'right',
+        paddingRight:20
+    },
+    SortPopup:{
+        padding:10,
+        backgroundColor:Colors.White
+    },
+    SortPopupTitle:{
+        fontSize:26,
+        textAlign:'center',
+        fontWeight:'bold'
+    },
+    SortPopupContent:{
+        marginTop:20,
+        justifyContent:'center',
+        flexDirection:'row'
+    },
+    SortPopupButton:{
+        backgroundColor:Colors.Light,
+        //width:130,
+        marginHorizontal:10,
+        paddingVertical:10,
+        paddingHorizontal:20,
+        borderRadius:26,
+        borderColor:Colors.Medium,
+        borderWidth:1
+    },
+    SortPopupButtonTitle:{
+        textAlign:'center'
+    },
+
+    SupplierItemBox:{
+        paddingVertical:10,
+        paddingHorizontal:20,
+        backgroundColor:Colors.White,
+        borderRadius:10,
+        marginTop:10
+    },
+    SupplierItemImage:{
+        width:100,
+        height:120,
+        borderRadius:10
+    },
+    SupplierItemDetail:{
+        width:'74%',
+        justifyContent:'flex-end',
+        alignItems:'flex-end',
+    },
+    SupplierName:{
+        
     }
 })
 export default ListHotelStyle;

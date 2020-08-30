@@ -10,6 +10,7 @@ import UserScreen from "../screens/UserScreen";
 import SearchScreen from "../screens/SearchScreen";
 import LocationScreen from "../screens/LocationScreen";
 import ListHotelScreen from "../screens/ListHotelScreen";
+import SupplierScreen from "../screens/SupplierScreen";
 
 import { View, Text, Alert, TextInput, TouchableOpacity } from "react-native";
 import MainStyle from "../stylesheets/MainStyle";
@@ -52,6 +53,7 @@ const HomeOptions = (props) => ({
 });
 const SearchOptions = (props) => ({
   title: "Home",
+  headerTintColor: Colors.Primary,
   headerTitleStyle: {
     fontSize: 16,
     color: Colors.Primary,
@@ -59,6 +61,7 @@ const SearchOptions = (props) => ({
 });
 const LocationOptions = (props) => ({
   title: "",
+  headerTintColor: Colors.Primary,
   headerTitle: () => (
     <View>
       <TextInput
@@ -80,10 +83,17 @@ const ListHotelOptions = (props) => ({
     fontSize:16
   },
 })
+const SupplierOptions = ()=>({
+  title:"Chọn nhà cung cấp",
+  headerTintColor:Colors.Primary,
+});
 const CashbackOptions = {};
 const ExtentionOptions = {};
 const UserOptions = {};
-const HotelOptions = {};
+const HotelOptions = ()=>({
+  title:"Chi tiết khách sạn",
+  headerTintColor:Colors.Primary,
+});
 const PaymentOptions = {};
 
 export function HomeTab() {
@@ -109,8 +119,17 @@ export function HomeTab() {
         component={ListHotelScreen}
         options={ListHotelOptions}
       />
-      <HomeStack.Screen name="Hotel" component={HotelScreen} />
+      <HomeStack.Screen 
+      name="Hotel" 
+      component={HotelScreen} 
+      options={HotelOptions}
+      />
       <HomeStack.Screen name="Payment" component={PaymentScreen} />
+      <HomeStack.Screen 
+      name="Supplier" 
+      component={SupplierScreen}
+      options={SupplierOptions}
+      />
     </HomeStack.Navigator>
   );
 }
