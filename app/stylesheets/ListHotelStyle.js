@@ -88,11 +88,11 @@ const ListHotelStyle = StyleSheet.create({
         textAlign:'right',
         paddingRight:20
     },
-    SortPopup:{
+    Popup:{
         padding:10,
         backgroundColor:Colors.White
     },
-    SortPopupTitle:{
+    PopupTitle:{
         fontSize:26,
         textAlign:'center',
         fontWeight:'bold'
@@ -134,6 +134,31 @@ const ListHotelStyle = StyleSheet.create({
         alignItems:'flex-end',
     },
     SupplierName:{
+        
+    },
+
+    FilterTitle:{
+        fontSize:18
+    },
+    FilterStarBox:{
+        marginLeft:20,
+        marginVertical:10,
+        flexDirection:'row', 
+        flexWrap:'wrap'
+    },
+    FilterStar:{
+        flexDirection:'row',
+        paddingVertical:6, 
+        paddingHorizontal:16,
+        margin:10,
+        borderRadius:20
+    },
+    FilterButton:{
+        backgroundColor:Colors.Primary,
+        paddingVertical:10,
+        paddingHorizontal:26,
+        width:110,
+        borderRadius:20,
         
     }
 })

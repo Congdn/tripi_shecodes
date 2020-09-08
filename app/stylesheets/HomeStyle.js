@@ -75,7 +75,11 @@ const HomeStyle = StyleSheet.create({
     position:'absolute',
     width:'100%',
     bottom:0,
-    opacity:0.6
+    opacity:0.6,
+    backgroundColor:'rgba(96, 96, 96,0.5)',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+
   },
   BtnShowDetailIcon:{
     textAlign:'center',

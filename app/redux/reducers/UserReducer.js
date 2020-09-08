@@ -2,7 +2,7 @@ const initialState = {
     loginstatus: 0, // -1 default, 0: false, 1: success 
     userid:'',
     user_info:null,
-    cashback: 0
+    cashback: 0,
 };
 
 //set state
