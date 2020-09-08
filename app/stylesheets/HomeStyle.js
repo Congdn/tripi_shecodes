@@ -55,7 +55,7 @@ const HomeStyle = StyleSheet.create({
   },
   HotelItemSapo: {
     textAlign: "justify",
-    height:78,
+    height:74,
     fontSize:12,
     color:Colors.White,
     backgroundColor:null,

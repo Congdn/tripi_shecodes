@@ -17,86 +17,87 @@ import MainStyle from "../stylesheets/MainStyle";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../commons/Colors";
 
+//Home
 const HomeStack = createStackNavigator();
 
-const HomeOptions = (props) => ({
-  title: "SHECODES",
-  headerStyle: {
-    backgroundColor: "#fff",
-  },
-  headerTintColor: "#fc5c65",
-  headerTitleStyle: {
-    fontWeight: "bold",
-    fontSize: 26,
-  },
-  headerRight: () => (
-    <View style={{ flexDirection: "row", marginRight: 10 }}>
-      <TouchableOpacity
-        onPress={() => {
-          props.navigation.navigate("Search");
-          //console.log(p);
-          //Alert.alert("Thông báo", "Searching...")
-        }}
-      >
-        <FontAwesome name="search" size={26} color="#fc5c65" />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{ marginLeft: 10 }}
-        onPress={() => {
-          Alert.alert("Thông báo", "Opening...");
-        }}
-      >
-        <FontAwesome name="bell" size={26} color="#fc5c65" />
-      </TouchableOpacity>
-    </View>
-  ),
-});
-const SearchOptions = (props) => ({
-  title: "Home",
-  headerTintColor: Colors.Primary,
-  headerTitleStyle: {
-    fontSize: 16,
-    color: Colors.Primary,
-  },
-});
-const LocationOptions = (props) => ({
-  title: "",
-  headerTintColor: Colors.Primary,
-  headerTitle: () => (
-    <View>
-      <TextInput
-        style={{
-          backgroundColor: Colors.Light,
-          paddingLeft: 10,
-          paddingVertical: 4,
-          borderRadius: 10
-        }}
-        placeholder="Nhập nơi đến"
-      ></TextInput>
-    </View>
-  ),
-});
-const ListHotelOptions = (props) => ({
-  title: "Tìm kiếm",
-  headerTintColor: Colors.Primary,
-  headerTitleStyle: {
-    fontSize:16
-  },
-})
-const SupplierOptions = ()=>({
-  title:"Chọn nhà cung cấp",
-  headerTintColor:Colors.Primary,
-});
-const CashbackOptions = {};
-const ExtentionOptions = {};
-const UserOptions = {};
-const HotelOptions = ()=>({
-  title:"Chi tiết khách sạn",
-  headerTintColor:Colors.Primary,
-});
-const PaymentOptions = {};
-
 export function HomeTab() {
+  const HomeOptions = (props) => ({
+    title: "SHECODES",
+    headerStyle: {
+      backgroundColor: "#fff",
+    },
+    headerTintColor: "#fc5c65",
+    headerTitleStyle: {
+      fontWeight: "bold",
+      fontSize: 26,
+    },
+    headerRight: () => (
+      <View style={{ flexDirection: "row", marginRight: 10 }}>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate("Search");
+            //console.log(p);
+            //Alert.alert("Thông báo", "Searching...")
+          }}
+        >
+          <FontAwesome name="search" size={26} color="#fc5c65" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ marginLeft: 10 }}
+          onPress={() => {
+            Alert.alert("Thông báo", "Opening...");
+          }}
+        >
+          <FontAwesome name="bell" size={26} color="#fc5c65" />
+        </TouchableOpacity>
+      </View>
+    ),
+  });
+  const SearchOptions = (props) => ({
+    title: "Home",
+    headerTintColor: Colors.Primary,
+    headerTitleStyle: {
+      fontSize: 16,
+      color: Colors.Primary,
+    },
+  });
+  const LocationOptions = (props) => ({
+    title: "",
+    headerTintColor: Colors.Primary,
+    headerTitle: () => (
+      <View>
+        <TextInput
+          style={{
+            backgroundColor: Colors.Light,
+            paddingLeft: 10,
+            paddingVertical: 4,
+            borderRadius: 10
+          }}
+          placeholder="Nhập nơi đến"
+        ></TextInput>
+      </View>
+    ),
+  });
+  const ListHotelOptions = (props) => ({
+    title: "Tìm kiếm",
+    headerTintColor: Colors.Primary,
+    headerTitleStyle: {
+      fontSize: 16
+    },
+  })
+  const SupplierOptions = () => ({
+    title: "Chọn nhà cung cấp",
+    headerTintColor: Colors.Primary,
+  });
+  const CashbackOptions = {};
+  const ExtentionOptions = {};
+  const UserOptions = {};
+  const HotelOptions = () => ({
+    title: "Chi tiết khách sạn",
+    headerTintColor: Colors.Primary,
+  });
+  const PaymentOptions = {};
+  
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
@@ -119,20 +120,22 @@ export function HomeTab() {
         component={ListHotelScreen}
         options={ListHotelOptions}
       />
-      <HomeStack.Screen 
-      name="Hotel" 
-      component={HotelScreen} 
-      options={HotelOptions}
+      <HomeStack.Screen
+        name="Hotel"
+        component={HotelScreen}
+        options={HotelOptions}
       />
       <HomeStack.Screen name="Payment" component={PaymentScreen} />
-      <HomeStack.Screen 
-      name="Supplier" 
-      component={SupplierScreen}
-      options={SupplierOptions}
+      <HomeStack.Screen
+        name="Supplier"
+        component={SupplierScreen}
+        options={SupplierOptions}
       />
     </HomeStack.Navigator>
   );
 }
+//end home
+//cashback
 const CashbackStack = createStackNavigator();
 export function CashbackTab() {
   return (
@@ -141,6 +144,8 @@ export function CashbackTab() {
     </CashbackStack.Navigator>
   );
 }
+//end cashback
+//extention
 const ExtentionStack = createStackNavigator();
 export function ExtentionTab() {
   return (
@@ -149,11 +154,19 @@ export function ExtentionTab() {
     </ExtentionStack.Navigator>
   );
 }
+//end extention
+//user
 const UserStack = createStackNavigator();
 export function UserTab() {
+  const UserOptions = ()=>({
+    title:"USER",
+    headerShown:false,
+    headerTintColor:Colors.Primary,
+  });
   return (
     <UserStack.Navigator>
-      <UserStack.Screen name="User" component={UserScreen} />
+      <UserStack.Screen name="User" component={UserScreen} options={UserOptions}/>
     </UserStack.Navigator>
   );
 }
+//end user

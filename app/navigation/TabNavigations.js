@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {Ionicons,FontAwesome}  from '@expo/vector-icons';
 import { HomeTab,CashbackTab,ExtentionTab,UserTab } from './StackNavigations';
 import React from 'react';
+import Colors from '../commons/Colors';
 
 const Tab = createBottomTabNavigator();
 export default function TabNavigation() {
@@ -40,7 +41,7 @@ export default function TabNavigation() {
                 <Tab.Screen name="Home" component={HomeTab} />
                 <Tab.Screen name="Cashback" component={CashbackTab} />
                 <Tab.Screen name="Extention" component={ExtentionTab} />
-                <Tab.Screen name="User" component={UserTab} />
+                <Tab.Screen name="User" component={UserTab}/>
             </Tab.Navigator>
         </NavigationContainer>
     )
