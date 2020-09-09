@@ -27,7 +27,6 @@ export default function HotelScreen(props) {
   const [hotel, setHotel] = React.useState(null);
 
   React.useEffect(() => {
-    console.log(routeParams);
     fetch("https://tripi-shecodes.herokuapp.com/hotels/" + routeParams.hotel_id)
       .then((response) => response.json())
       .then((res) => {
