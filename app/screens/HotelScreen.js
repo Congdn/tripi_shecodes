@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+  Linking,
+} from "react-native";
 import MapView from "react-native-maps";
 import {
   FontAwesome,
@@ -13,8 +21,26 @@ import MainStyle from "../stylesheets/MainStyle";
 import HotelStyle from "../stylesheets/HotelStyle";
 import Colors from "../commons/Colors";
 
-export default function HotelScreen() {
-  return (
+export default function HotelScreen(props) {
+  const routeParams = props.route.params;
+
+  const [hotel, setHotel] = React.useState(null);
+
+  React.useEffect(() => {
+    console.log(routeParams);
+    fetch("https://tripi-shecodes.herokuapp.com/hotels/" + routeParams.hotel_id)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res["status-code"] === 200) {
+          setHotel(res.data);
+        }
+      })
+      .catch((error) => Alert.alert("Thông báo", "Lỗi khi gọi server"));
+    //console.log(hotel);
+  }, []);
+  return hotel === null ? (
+    <ActivityIndicator size="large" />
+  ) : (
     <View>
       <ScrollView style={HotelStyle.Container}>
         <Image
@@ -22,7 +48,7 @@ export default function HotelScreen() {
           source={require("../assets/images/1407953244000-177513283.jpg")}
         />
         <View style={MainStyle.Container}>
-          <Text style={MainStyle.H3}>Khách sạn ngàn sao</Text>
+  <Text style={MainStyle.H3}>{hotel.name}</Text>
           <View style={HotelStyle.ScopeBox}>
             <FontAwesome name="star" size={8} color={Colors.Secondary} />
             <FontAwesome name="star" size={8} color={Colors.Secondary} />
@@ -118,24 +144,19 @@ export default function HotelScreen() {
           <View style={HotelStyle.DescriptionBox}>
             <Text style={MainStyle.H3}>Giới thiệu khách sạn</Text>
             <Text style={HotelStyle.Description}>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
+              {hotel.description.trim()}
             </Text>
           </View>
         </View>
       </ScrollView>
       <View style={HotelStyle.BtnBookBox}>
-      <TouchableOpacity style={HotelStyle.BtnBook}>
-        <Text style={HotelStyle.BtnBookTitle}>Đặt phòng</Text>
-      </TouchableOpacity>
+        <TouchableOpacity 
+        onPress={()=>{
+          Linking.openURL(hotel.url);
+        }}
+        style={HotelStyle.BtnBook}>
+          <Text style={HotelStyle.BtnBookTitle}>Đặt phòng</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

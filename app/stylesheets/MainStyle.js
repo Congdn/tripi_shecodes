@@ -66,6 +66,9 @@ const MainStyle = StyleSheet.create({
         paddingHorizontal:20,
         borderRadius:10,
         backgroundColor:Colors.Primary
+    },
+    Loading:{
+        fontSize:30
     }
 })
 export default MainStyle;

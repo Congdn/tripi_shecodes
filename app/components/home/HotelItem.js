@@ -7,10 +7,15 @@ import HomeStyle from "../../stylesheets/HomeStyle";
 export default function HotelItem(props) {
   const [showDetail, setShowDetail] = React.useState(false);
 
+  const description = props.description.substring(0, props.description.indexOf(".")).trim();
+
   return (
     <TouchableOpacity
       onPress={() => {
-        props.nav.navigate("Hotel");
+        props.nav.navigate("Hotel",
+          {
+            hotel_id:props.hotelId
+          });
       }}
       style={HomeStyle.HotelItem}
     >
@@ -36,11 +41,10 @@ export default function HotelItem(props) {
       )}
       {showDetail && (
         <View style={HomeStyle.HotelItemDetail}>
-          <Text style={HomeStyle.HotelItemDetailTitle}>Khách sạn ngàn sao</Text>
+          <Text style={HomeStyle.HotelItemDetailTitle}>{props.name}</Text>
           <Text style={HomeStyle.HotelItemStar}>* * * * *</Text>
           <Text style={HomeStyle.HotelItemSapo}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
+            {description}
           </Text>
           <TouchableOpacity
           onPress={() => setShowDetail(!showDetail)}
