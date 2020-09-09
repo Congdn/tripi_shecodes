@@ -1,10 +1,8 @@
 import React from 'react';
-import { View, Text, Image, Alert, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import { View, Text, Image, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import Colors from '../commons/Colors';
-import MainStyle from '../stylesheets/MainStyle';
 import UserStyle from '../stylesheets/UserStyle';
-import { UserTab } from '../navigation/StackNavigations';
 
 export default function UserScreen() {
     return (

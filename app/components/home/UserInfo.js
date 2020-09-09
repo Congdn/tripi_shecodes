@@ -12,10 +12,10 @@ export default function UserInfo() {
 
     return (
         <View style={[MainStyle.Container,MainStyle.WhiteText]}>
-            <Text style={[MainStyle.H4,MainStyle.WhiteText]}>Xin chào {user ? user.name : "___"}</Text>
-            <View style={[MainStyle.Margin10,{flexDirection:'row'}]}>
-                <Text style={[MainStyle.FontSize,MainStyle.WhiteText,{flex:0.9}]}>Số tiền hoàn lại:</Text>
-                <Text style={[MainStyle.H3,MainStyle.WhiteText,{flex:0.1}]}>{cashback}đ</Text>
+            <Text style={[MainStyle.H4,MainStyle.WhiteText]}>Xin chào {user ? user.name : "Công Ngô"}</Text>
+            <View style={[MainStyle.Margin10,{flexDirection:'row', width:'100%', height:40}]}>
+                <Text style={[MainStyle.FontSize,MainStyle.WhiteText]}>Số tiền hoàn lại:</Text>
+                <Text style={[MainStyle.H3,MainStyle.WhiteText,{position:'absolute',right:10}]}>{cashback ?? '1.000.000'}đ</Text>
             </View>
         </View>
     )

@@ -1,8 +1,9 @@
 import React from "react";
-import { View, Text, Image, FlatList } from "react-native";
+import { View, Text, Image, FlatList, Alert } from "react-native";
 import MainStyle from "../../stylesheets/MainStyle";
 import HomeStyle from "../../stylesheets/HomeStyle";
 import HotelItem from "./HotelItem";
+import * as axios from 'axios';
 
 const DATA = [
   {
@@ -47,6 +48,21 @@ const DATA = [
   },
 ];
 export default function HotelBox(props) {
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(()=>{
+    axios.get("https://tripi-shecodes.herokuapp.com/hotels/recommendation?latitude=21.028333&longitude=105.853333")
+    .then((response)=>{
+      response.data.map((item,i)=>{
+        
+      })
+      setData(response.data)
+    })
+    .catch((erorr)=>{
+      Alert.alert("Thông báo","Lỗi khi gọi server");
+    })
+  },[])
+
   return (
     <View style={HomeStyle.HotelBox}>
       <Text style={HomeStyle.BoxTitle}>{props.title}</Text>

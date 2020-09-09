@@ -17,14 +17,23 @@ import MainStyle from "../stylesheets/MainStyle";
 import ListHotelStyle from "../stylesheets/ListHotelStyle";
 
 import HotelItem from "../components/search/HotelItemComponent";
+import MapView, { Marker } from "react-native-maps";
+import * as Location from 'expo-location';
 
 export default function ListHotelScreen(props) {
   const [listType, setListType] = React.useState("List");
   const [hotelStar, setHotelStar] = React.useState(0);
+  const [currentLocation, setCurrentLocation] =  React.useState(null);
 
   const refSortRBSheet = React.useRef();
   const refFilterRBSheet = React.useRef();
 
+  const SetCurrentLocation = ()=>{
+    (async ()=>{
+      const location = await Location.getCurrentPositionAsync();
+      setCurrentLocation(location.coords);
+    })();
+  }
   return (
     <View style={MainStyle.Container}>
       <View style={ListHotelStyle.Header}>
@@ -71,6 +80,7 @@ export default function ListHotelScreen(props) {
               ListHotelStyle.ListType,
             ]}
             onPress={() => {
+              SetCurrentLocation();
               setListType("Map");
             }}
           >
@@ -81,19 +91,53 @@ export default function ListHotelScreen(props) {
           </TouchableHighlight>
         </View>
       </View>
-      <ScrollView
-        style={{ marginTop: 10, marginBottom: 20 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <HotelItem nav={props.navigation}></HotelItem>
-        <HotelItem nav={props.navigation}></HotelItem>
-        <HotelItem nav={props.navigation}></HotelItem>
-        <HotelItem nav={props.navigation}></HotelItem>
-        <HotelItem nav={props.navigation}></HotelItem>
-        <HotelItem nav={props.navigation}></HotelItem>
-        <HotelItem nav={props.navigation}></HotelItem>
-        <HotelItem nav={props.navigation}></HotelItem>
-      </ScrollView>
+      {
+      listType === "List" &&
+        <ScrollView
+          style={{ marginTop: 10, marginBottom: 20 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <HotelItem nav={props.navigation}></HotelItem>
+          <HotelItem nav={props.navigation}></HotelItem>
+          <HotelItem nav={props.navigation}></HotelItem>
+          <HotelItem nav={props.navigation}></HotelItem>
+          <HotelItem nav={props.navigation}></HotelItem>
+          <HotelItem nav={props.navigation}></HotelItem>
+          <HotelItem nav={props.navigation}></HotelItem>
+          <HotelItem nav={props.navigation}></HotelItem>
+        </ScrollView>
+      }
+
+      {
+        listType === "Map" &&
+        <MapView
+        style={ListHotelStyle.MapView}
+        initialRegion={{
+          latitude:currentLocation !== null ? currentLocation.latitude : 21.0021622,
+          longitude:currentLocation !== null ? currentLocation.longitude : 105.8056478,
+          latitudeDelta:0.1,
+          longitudeDelta: 0.1
+        }}
+        >
+          <Marker 
+          key={0}
+          coordinate={{
+            latitude:currentLocation !== null ? currentLocation.latitude : 21.0021622,
+            longitude:currentLocation !== null ? currentLocation.longitude : 105.8056478,
+          }}
+          title="Vị trí của bạn"
+          ></Marker>
+          <Marker 
+          key={1}
+          coordinate={{
+            latitude:21,
+            longitude:105.8,
+          }}
+          title="Khách sạn ngàn sao"
+          description="Mô tả khách sạn ngàn sao"
+          ></Marker>
+        </MapView>
+      }
 
       <RBSheet ref={refSortRBSheet} height={180}>
         <View style={ListHotelStyle.Popup}>
@@ -141,7 +185,7 @@ export default function ListHotelScreen(props) {
                 onPress={() => setHotelStar(1)}
                 style={[{
                   backgroundColor: hotelStar === 1 ? Colors.Medium : Colors.Gray
-                },ListHotelStyle.FilterStar ]}
+                }, ListHotelStyle.FilterStar]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
               </TouchableOpacity>
@@ -149,7 +193,7 @@ export default function ListHotelScreen(props) {
                 onPress={() => setHotelStar(2)}
                 style={[{
                   backgroundColor: hotelStar === 2 ? Colors.Medium : Colors.Gray
-                },ListHotelStyle.FilterStar]}
+                }, ListHotelStyle.FilterStar]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
@@ -158,7 +202,7 @@ export default function ListHotelScreen(props) {
                 onPress={() => setHotelStar(3)}
                 style={[{
                   backgroundColor: hotelStar === 3 ? Colors.Medium : Colors.Gray
-                },ListHotelStyle.FilterStar]}
+                }, ListHotelStyle.FilterStar]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
@@ -168,7 +212,7 @@ export default function ListHotelScreen(props) {
                 onPress={() => setHotelStar(4)}
                 style={[{
                   backgroundColor: hotelStar === 4 ? Colors.Medium : Colors.Gray
-                },ListHotelStyle.FilterStar]}
+                }, ListHotelStyle.FilterStar]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
@@ -179,7 +223,7 @@ export default function ListHotelScreen(props) {
                 onPress={() => setHotelStar(5)}
                 style={[{
                   backgroundColor: hotelStar === 5 ? Colors.Medium : Colors.Gray
-                },ListHotelStyle.FilterStar]}
+                }, ListHotelStyle.FilterStar]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
@@ -189,12 +233,12 @@ export default function ListHotelScreen(props) {
               </TouchableOpacity>
             </View>
           </View>
-          <View>
+          <View style={{alignItems:'center'}}>
             <TouchableOpacity
-            style={ListHotelStyle.FilterButton}
-             onPress={()=>{
-              refFilterRBSheet.current.close();
-            }}>
+              style={ListHotelStyle.FilterButton}
+              onPress={() => {
+                refFilterRBSheet.current.close();
+              }}>
               <Text>Áp dụng</Text>
             </TouchableOpacity>
           </View>

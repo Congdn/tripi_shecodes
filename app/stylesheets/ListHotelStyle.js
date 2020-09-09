@@ -160,6 +160,12 @@ const ListHotelStyle = StyleSheet.create({
         width:110,
         borderRadius:20,
         
-    }
+    },
+    MapView:{
+        width:'100%',
+        height:'100%',
+        marginTop:10,
+        borderRadius:10
+      }
 })
 export default ListHotelStyle;

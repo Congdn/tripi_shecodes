@@ -19,7 +19,7 @@ export default function Main(){
             let locStatus = false;
             while (!locStatus) {
               const {status,permissions } = await Permissions.askAsync(Permissions.LOCATION);
-              console.log(status === "granted");
+              //console.log(status === "granted");
               locStatus = status === "granted";
             }
           })();

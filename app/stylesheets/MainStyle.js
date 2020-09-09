@@ -42,7 +42,7 @@ const MainStyle = StyleSheet.create({
         flexDirection:'row'
     },
     FontSize:{
-        fontSize:12
+        fontSize:14
     },
     WhiteText:{
         color:Colors.White,

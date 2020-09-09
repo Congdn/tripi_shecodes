@@ -1,11 +1,23 @@
 import React from "react";
-import { View, Text, TextInput, Button, Alert,TouchableOpacity } from "react-native";
+import { View, Text, TextInput, Button, Alert, TouchableOpacity } from "react-native";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import MainStyle from "../stylesheets/MainStyle";
 import SearchStyle from "../stylesheets/SearchStyle";
+import * as Location from 'expo-location';
 
 export default function LocationScreen(props) {
   const routeParams = props.route.params;
+
+  const [geoLocation, setGeoLocation] = React.useState(null);
+
+  React.useEffect(() => {
+    (async () => {
+      const currentLocation = await Location.getCurrentPositionAsync();
+      const res = await Location.reverseGeocodeAsync(currentLocation.coords);
+      setGeoLocation(res[0]);
+    })();
+  }, [])
+
   return (
     <View style={SearchStyle.location}>
       <TouchableOpacity
@@ -13,8 +25,8 @@ export default function LocationScreen(props) {
           SearchStyle.btnBoxLocation,
           { flexDirection: "row", alignItems: "center" },
         ]}
-        onPress={()=>{
-          routeParams.setlocation("Thanh Xuân");
+        onPress={() => {
+          routeParams.setlocation(geoLocation);
           props.navigation.pop();
         }}
       >
@@ -23,7 +35,13 @@ export default function LocationScreen(props) {
           <Text style={{ fontSize: 18, color: "#fc5c65", fontWeight: "bold" }}>
             Quanh vị trí hiện tại
           </Text>
-          <Text>Thanh Xuân</Text>
+          <Text>
+            {
+              geoLocation !== null ?
+                `${geoLocation.street}, ${geoLocation.region}, ${geoLocation.country}`
+                : "Không tìm thấy vị trí của bạn, vui lòng bật định vị"
+            }
+          </Text>
         </View>
       </TouchableOpacity>
 

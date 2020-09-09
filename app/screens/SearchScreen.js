@@ -9,7 +9,7 @@ import Colors from "../commons/Colors";
 import Moment from 'moment';
 
 export default function SearchScreen(props) {
-  const [locationTitle, setLocationTitle] = React.useState("");
+  const [location, setLocation] = React.useState(null);
   const [fromDateTitle, setFromDateTitle] = React.useState("");
   const [toDateTitle, setToDateTitle] = React.useState("");
   const [quatityTitle, setQuatityTitle] = React.useState("");
@@ -59,11 +59,17 @@ export default function SearchScreen(props) {
           </View>
           <TouchableOpacity
             onPress={() => props.navigation.navigate("Location",{
-              setlocation:setLocationTitle
+              setlocation:setLocation
             })}
             style={SearchStyle.btnSelect}
           >
-            <Text style={SearchStyle.btnSelectDetail}>{locationTitle === "" ? "Nơi đến" : locationTitle}</Text>
+            <Text style={SearchStyle.btnSelectDetail}>
+              {
+              location === null ? 
+              "Nơi đến" : 
+              `${location.street}, ${location.region}, ${location.country}`
+              }
+              </Text>
           </TouchableOpacity>
         </View>
       </View>
