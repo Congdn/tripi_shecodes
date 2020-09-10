@@ -63,39 +63,39 @@ export default function UserScreen() {
                             </View>
                         </View>
                     </View>
-                    <View style={UserStyle.ContentBoxItem}>
+                    <View style={UserStyle.ButtonBoxItem}>
                         <Text style={UserStyle.ContentTitle}>Thông tin TripI</Text>
-                        <View style={UserStyle.ContentItemBox}>
-                            <TouchableOpacity style={UserStyle.ContentItemRow}>
+                        <View style={UserStyle.ButtonItem}>
+                            <TouchableOpacity style={UserStyle.ButtonItemRow}>
                                 <FontAwesome style={UserStyle.ContentItemIcon} name="user-o" size={24}  color={Colors.Primary} />
                                 <Text style={UserStyle.ContentItemTitle}>Loại người dùng: Thường</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={UserStyle.ContentItemRow}>
+                            <TouchableOpacity style={UserStyle.ButtonItemRow}>
                                 <FontAwesome style={UserStyle.ContentItemIcon} name="history" size={24}  color={Colors.Primary} />
                                 <Text style={UserStyle.ContentItemTitle}>Lịch sử giao dịch</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={UserStyle.ContentItemRow}>
+                            <TouchableOpacity style={UserStyle.ButtonItemRow}>
                                 <MaterialCommunityIcons style={UserStyle.ContentItemIcon} name="security" size={24}  color={Colors.Primary} />
                                 <Text style={UserStyle.ContentItemTitle}>Chính sách và bảo mật</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={UserStyle.ContentBoxItem}>
+                    <View style={UserStyle.ButtonBoxItem}>
                         <Text style={UserStyle.ContentTitle}>Tiện ích khác</Text>
-                        <View style={UserStyle.ContentItemBox}>
-                            <TouchableOpacity style={UserStyle.ContentItemRow}>
+                        <View style={UserStyle.ButtonItem}>
+                            <TouchableOpacity style={UserStyle.ButtonItemRow}>
                                 <FontAwesome style={UserStyle.ContentItemIcon} name="wechat" size={24} color={Colors.Primary} />
                                 <Text style={UserStyle.ContentItemTitle}>Chat với TripI</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={UserStyle.ContentItemRow}>
+                            <TouchableOpacity style={UserStyle.ButtonItemRow}>
                                 <FontAwesome style={UserStyle.ContentItemIcon} name="phone-square" size={24} color={Colors.Primary} />
                                 <Text style={UserStyle.ContentItemTitle}>Liên hệ tổng đài</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={UserStyle.ContentItemRow}>
+                            <TouchableOpacity style={UserStyle.ButtonItemRow}>
                                 <FontAwesome style={UserStyle.ContentItemIcon} name="warning" size={24} color={Colors.Primary} />
                                 <Text style={UserStyle.ContentItemTitle}>Góp ý & Báo lỗi ứng dụng</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={UserStyle.ContentItemRow}>
+                            <TouchableOpacity style={UserStyle.ButtonItemRow}>
                                 <Feather style={UserStyle.ContentItemIcon} name="settings" size={24} color={Colors.Primary} />
                                 <Text style={UserStyle.ContentItemTitle}>Thiết lập ứng dụng</Text>
                             </TouchableOpacity>

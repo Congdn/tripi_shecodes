@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "tripi_shecodes",
-    "slug": "tripi_shecodes",
+    "name": "Hotel recomendation",
+    "slug": "hotel-recomendation",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
@@ -21,6 +21,7 @@
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }

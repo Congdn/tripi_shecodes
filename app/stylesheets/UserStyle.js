@@ -65,8 +65,24 @@ const UserStyle = StyleSheet.create({
         width:50,
     },
     ContentItemTitle:{
-        marginLeft:20,
+        marginLeft:10,
         paddingVertical:10,
+    },
+
+    ButtonBoxItem:{
+        marginTop:20
+    },
+    ButtonItem:{
+        backgroundColor:Colors.White,
+        width:'94%',
+        padding:10,
+        borderRadius:10,
+        marginVertical:5,
+        flexDirection:'row',
+        flexWrap:'wrap'
+    },
+    ButtonItemRow:{
+        flexDirection:'row',
     }
 
 })
