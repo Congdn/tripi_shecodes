@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Hotel recomendation",
-    "slug": "hotel-recomendation",
+    "name": "Hotels recomendation",
+    "slug": "hotels-recomendation",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
@@ -22,6 +22,9 @@
     "web": {
       "favicon": "./app/assets/favicon.png"
     },
-    "description": ""
+    "description": "",
+    "android": {
+      "package": "com.congdn.tripi_shecodes"
+    }
   }
 }

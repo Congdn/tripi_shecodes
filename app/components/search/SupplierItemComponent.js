@@ -13,7 +13,9 @@ export default function Supplier(props) {
   return (
     <TouchableOpacity 
     onPress={()=>{
-        props.nav.navigate("Hotel")
+        props.nav.navigate("Hotel", {
+          hotel_id: '70ad23b8-40c4-4de6-8430-4960417e5186'
+        })
       }}
     style={ListHotelStyle.SupplierItemBox}>
       <Text style={ListHotelStyle.ItemTitle}>Khách sạn ngàn SA0*******</Text>

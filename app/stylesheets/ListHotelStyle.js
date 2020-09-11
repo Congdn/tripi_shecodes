@@ -140,6 +140,9 @@ const ListHotelStyle = StyleSheet.create({
     FilterTitle:{
         fontSize:18
     },
+    FilterBox:{
+        marginLeft:10
+    },
     FilterStarBox:{
         marginLeft:20,
         marginVertical:10,

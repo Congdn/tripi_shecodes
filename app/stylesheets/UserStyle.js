@@ -78,8 +78,8 @@ const UserStyle = StyleSheet.create({
         padding:10,
         borderRadius:10,
         marginVertical:5,
-        flexDirection:'row',
-        flexWrap:'wrap'
+        //flexDirection:'row',
+        //flexWrap:'wrap'
     },
     ButtonItemRow:{
         flexDirection:'row',

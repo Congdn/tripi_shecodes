@@ -6,12 +6,13 @@ import {
   TouchableHighlight,
   FlatList,
   ScrollView,
-  ListView,
+  Dimensions
 } from "react-native";
 import { FontAwesome, Feather, FontAwesome5 } from "@expo/vector-icons";
 import Colors from "../commons/Colors";
 import RBSheet from "react-native-raw-bottom-sheet";
-import RangeSlider from 'react-native-range-slider-expo';
+//import RangeSlider from 'react-native-range-slider-expo';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 import MainStyle from "../stylesheets/MainStyle";
 import ListHotelStyle from "../stylesheets/ListHotelStyle";
@@ -20,16 +21,22 @@ import HotelItem from "../components/search/HotelItemComponent";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from 'expo-location';
 
+const Format = (text, n, x) => {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return text.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+}
+
+
 export default function ListHotelScreen(props) {
   const [listType, setListType] = React.useState("List");
   const [hotelStar, setHotelStar] = React.useState(0);
-  const [currentLocation, setCurrentLocation] =  React.useState(null);
+  const [currentLocation, setCurrentLocation] = React.useState(null);
 
   const refSortRBSheet = React.useRef();
   const refFilterRBSheet = React.useRef();
 
-  const SetCurrentLocation = ()=>{
-    (async ()=>{
+  const SetCurrentLocation = () => {
+    (async () => {
       const location = await Location.getCurrentPositionAsync();
       setCurrentLocation(location.coords);
     })();
@@ -92,7 +99,7 @@ export default function ListHotelScreen(props) {
         </View>
       </View>
       {
-      listType === "List" &&
+        listType === "List" &&
         <ScrollView
           style={{ marginTop: 10, marginBottom: 20 }}
           showsVerticalScrollIndicator={false}
@@ -111,30 +118,30 @@ export default function ListHotelScreen(props) {
       {
         listType === "Map" &&
         <MapView
-        style={ListHotelStyle.MapView}
-        initialRegion={{
-          latitude:currentLocation !== null ? currentLocation.latitude : 21.0021622,
-          longitude:currentLocation !== null ? currentLocation.longitude : 105.8056478,
-          latitudeDelta:0.1,
-          longitudeDelta: 0.1
-        }}
+          style={ListHotelStyle.MapView}
+          initialRegion={{
+            latitude: currentLocation !== null ? currentLocation.latitude : 21.0021622,
+            longitude: currentLocation !== null ? currentLocation.longitude : 105.8056478,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1
+          }}
         >
-          <Marker 
-          key={0}
-          coordinate={{
-            latitude:currentLocation !== null ? currentLocation.latitude : 21.0021622,
-            longitude:currentLocation !== null ? currentLocation.longitude : 105.8056478,
-          }}
-          title="Vị trí của bạn"
+          <Marker
+            key={0}
+            coordinate={{
+              latitude: currentLocation !== null ? currentLocation.latitude : 21.0021622,
+              longitude: currentLocation !== null ? currentLocation.longitude : 105.8056478,
+            }}
+            title="Vị trí của bạn"
           ></Marker>
-          <Marker 
-          key={1}
-          coordinate={{
-            latitude:21,
-            longitude:105.8,
-          }}
-          title="Khách sạn ngàn sao"
-          description="Mô tả khách sạn ngàn sao"
+          <Marker
+            key={1}
+            coordinate={{
+              latitude: 21,
+              longitude: 105.8,
+            }}
+            title="Khách sạn ngàn sao"
+            description="Mô tả khách sạn ngàn sao"
           ></Marker>
         </MapView>
       }
@@ -166,8 +173,18 @@ export default function ListHotelScreen(props) {
           <Text style={ListHotelStyle.PopupTitle}>Bộ lọc</Text>
           <View style={ListHotelStyle.FilterBox}>
             <Text style={ListHotelStyle.FilterTitle}>Khoảng giá</Text>
-            <RangeSlider
-              fromValueOnChange={value => console.log(value)}
+            {/* <RangeSlider
+              style={{ width: 160, height: 80 }}
+              gravity={'center'}
+              min={200}
+              max={1000}
+              step={20}
+              selectionColor="#3df"
+              blankColor="#f618"
+              onValueChanged={(low, high, fromUser) => {
+                
+              }} */
+              /* fromValueOnChange={value => console.log(value)}
               toValueOnChange={value => console.log(value)}
               min={20}
               max={40}
@@ -175,8 +192,37 @@ export default function ListHotelScreen(props) {
               fromKnobColor={Colors.Primary}
               toKnobColor={Colors.Danger}
               styleSize='small'
-              showRangeLabels={false}
-            />
+              showRangeLabels={false} /> */
+            }
+            <View style={{ marginHorizontal: 20 }}>
+              <MultiSlider
+                values={[0, 10000000]}
+                selectedStyle={{ backgroundColor: Colors.Dark }}
+                trackStyle={{ height: 2 }}
+                isMarkersSeparated={true}
+                enabledOne={true}
+                enabledTwo={true}
+                enableLabel={true}
+                sliderLength={Dimensions.get('window').width - 70}
+                markerSize={20}
+                min={0}
+                max={10000000}
+                step={50000}
+                customMarkerLeft={(e) => {
+                  return (<View><FontAwesome name="dot-circle-o" size={28} /></View>)
+                }}
+
+                customMarkerRight={(e) => {
+                  return (<View><FontAwesome name="dot-circle-o" size={28} /></View>)
+                }}
+                customLabel={(value) => {
+                  const leftVal = value.oneMarkerValue ?? 0;
+                  const rightVal = value.twoMarkerValue ?? 10000000;
+                  const label = `${Format(leftVal)} VNĐ - ${Format(rightVal)} VNĐ`;
+                  return (<Text style={{ textAlign: 'right', fontSize: 16, color: Colors.Primary }}>{label}</Text>)
+                }}
+              />
+            </View>
           </View>
           <View style={ListHotelStyle.FilterBox}>
             <Text style={ListHotelStyle.FilterTitle}>Số sao</Text>
@@ -233,7 +279,7 @@ export default function ListHotelScreen(props) {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{alignItems:'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <TouchableOpacity
               style={ListHotelStyle.FilterButton}
               onPress={() => {

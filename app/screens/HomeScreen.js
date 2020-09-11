@@ -14,31 +14,25 @@ export default function HomeScreen(props) {
         dispatch(logout);
     } */
     const [data, setData] = React.useState([]);
-    const [currentLocation, setCurrentLocation] = React.useState(null);
 
     React.useEffect(() => {
-        /* let latitude = 0;
-        let longitude = 0; */
         (async () => {
-            const location = await Location.getCurrentPositionAsync();
-            setCurrentLocation(location.coords);
-            /* latitude = location.coords.latitude;
-            longitude = location.coords.longitude;
-            console.log(latitude + longitude); */
+            let currentLocation;
+            await Location.getCurrentPositionAsync().then((value) => {
+                currentLocation = value.coords
+            });
+            const locationURL = currentLocation ? `https://tripi-shecodes.herokuapp.com/hotels/recommendation?latitude=${currentLocation.latitude}&longitude=${currentLocation.longitude}&page-index=1&page-size=10`
+                : `https://tripi-shecodes.herokuapp.com/hotels/recommendation?latitude=21.028334&longitude=105.853334&page-index=1&page-size=10`;
+            fetch(locationURL)
+                .then((response) => response.json())
+                .then((res) => {
+                    //console.log(res.data["paginated-hotels"]);
+                    if (res["status-code"] === 200) {
+                        setData(res.data["paginated-hotels"])
+                    }
+                })
+                .catch((error) => Alert.alert("Thông báo", "Lỗi khi gọi server"))
         })();
-
-        const locationURL = currentLocation ? `https://tripi-shecodes.herokuapp.com/hotels/recommendation?latitude=${currentLocation.latitude}&longitude=${currentLocation.longitude}&page-index=1&page-size=10`
-        : `https://tripi-shecodes.herokuapp.com/hotels/recommendation?latitude=21.028333&longitude=105.853333&page-index=3&page-size=10`;
-        console.log(locationURL);
-        fetch(locationURL)
-            .then((response) => response.json())
-            .then((res) => {
-                //console.log(res.data["paginated-hotels"]);
-                if (res["status-code"] === 200) {
-                    setData(res.data["paginated-hotels"])
-                }
-            })
-            .catch((error) => Alert.alert("Thông báo", "Lỗi khi gọi server"))
     }, []);
 
     return data.length === 0 ? <ActivityIndicator size="large" /> : (
