@@ -40,7 +40,7 @@ export default function TabNavigation() {
             >
                 <Tab.Screen name="Home" component={HomeTab} />
                 <Tab.Screen name="Cashback" component={CashbackTab} />
-                <Tab.Screen name="Extention" component={ExtentionTab} />
+                {/* <Tab.Screen name="Extention" component={ExtentionTab} /> */}
                 <Tab.Screen name="User" component={UserTab}/>
             </Tab.Navigator>
         </NavigationContainer>

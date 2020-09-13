@@ -1,5 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import {useSelector,useDispatch} from 'react-redux';
+import {AddAction} from '../redux/actions/SearchAction';
+import store from '../redux/store';
 
 import HomeScreen from "../screens/HomeScreen";
 import PaymentScreen from "../screens/PaymentScreen";
@@ -21,6 +24,8 @@ import Colors from "../commons/Colors";
 const HomeStack = createStackNavigator();
 
 export function HomeTab() {
+  const keyword = useSelector(state => state.searchReducer.keyword);
+
   const HomeOptions = (props) => ({
     title: "SHECODES",
     headerStyle: {
@@ -73,6 +78,12 @@ export function HomeTab() {
             paddingVertical: 4,
             borderRadius: 10
           }}
+          onChangeText={value=>{
+            const addAction = AddAction(value);
+            store.dispatch(addAction);
+          }}
+          value={keyword}
+          returnKeyType="search"
           placeholder="Nhập nơi đến"
         ></TextInput>
       </View>

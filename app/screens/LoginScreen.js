@@ -5,7 +5,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-nat
 
 export default function LoginScreen() {
     const [userID, setUserID] = React.useState('');
-    const loginstatus = useSelector(state => state.loginstatus);
+    const loginstatus = useSelector(state => state.userReducer.loginstatus);
     //const userid = useSelector(state => state.userid);
     const dispatch = useDispatch();
     const Login = () => {

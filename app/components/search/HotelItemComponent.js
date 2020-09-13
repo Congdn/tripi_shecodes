@@ -32,7 +32,7 @@ export default function HotelItem(props) {
           <Text style={ListHotelStyle.ItemReviewPoint}>(3k)</Text>
           <Text style={[MainStyle.WhiteText, ListHotelStyle.ItemAverage]}>9.5</Text>
         </View>
-        <View style={ListHotelStyle.ItemSupplier}>
+        {props.isAutocomplete ?? <View><View style={ListHotelStyle.ItemSupplier}>
           <Text style={{ color: Colors.Medium }}>Nhà cung cấp</Text>
           {/* <Picker
             selectedValue={supplier}
@@ -55,7 +55,7 @@ export default function HotelItem(props) {
             <MaterialIcons name="arrow-drop-down" size={20} />
           </TouchableOpacity>
         </View>
-        <Text style={ListHotelStyle.ItemPrice}>400.000 VNĐ</Text>
+        <Text style={ListHotelStyle.ItemPrice}>400.000 VNĐ</Text></View>}
         <Text></Text>
       </View>
     </TouchableOpacity>

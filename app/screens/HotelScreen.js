@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Linking,
+  Alert
 } from "react-native";
 import MapView from "react-native-maps";
 import {
@@ -27,7 +28,7 @@ export default function HotelScreen(props) {
   const [hotel, setHotel] = React.useState(null);
 
   React.useEffect(() => {
-    fetch("https://tripi-shecodes.herokuapp.com/hotels/" + routeParams.hotel_id)
+    fetch("https://tripi-shecodes.herokuapp.com/hotels/search?hotel-id=" + routeParams.hotel_id)
       .then((response) => response.json())
       .then((res) => {
         if (res["status-code"] === 200) {
@@ -47,17 +48,17 @@ export default function HotelScreen(props) {
           source={require("../assets/images/1407953244000-177513283.jpg")}
         />
         <View style={MainStyle.Container}>
-  <Text style={MainStyle.H3}>{hotel.name}</Text>
+  <Text style={MainStyle.H3}>{hotel["basic-info"].name}</Text>
           <View style={HotelStyle.ScopeBox}>
-            <FontAwesome name="star" size={8} color={Colors.Secondary} />
-            <FontAwesome name="star" size={8} color={Colors.Secondary} />
-            <FontAwesome name="star" size={8} color={Colors.Secondary} />
-            <FontAwesome name="star" size={8} color={Colors.Secondary} />
-            <FontAwesome name="star" size={8} color={Colors.Secondary} />
+            {hotel.quality.star_number > 0 && <FontAwesome name="star" size={12} color={Colors.Secondary} />}
+            {hotel.quality.star_number > 1 && <FontAwesome name="star" size={12} color={Colors.Secondary} />}
+            {hotel.quality.star_number > 2 && <FontAwesome name="star" size={12} color={Colors.Secondary} />}
+            {hotel.quality.star_number > 3 && <FontAwesome name="star" size={12} color={Colors.Secondary} />}
+            {hotel.quality.star_number > 4 && <FontAwesome name="star" size={12} color={Colors.Secondary} />}
             <Text
               style={[MainStyle.WhiteText, { padding: 2, borderRadius: 5 }]}
             >
-              9.5
+              {hotel.quality.service_score.toFixed(1)}
             </Text>
           </View>
           <View style={HotelStyle.Location}>
@@ -73,35 +74,39 @@ export default function HotelScreen(props) {
             </Text>
             <View style={HotelStyle.HotelSpecialItem}>
               <MaterialCommunityIcons name="airport" size={16} />
-              <Text style={HotelStyle.SpecialTitle}>Đưa/đón tại sân bay</Text>
+              <Text style={[HotelStyle.SpecialTitle,{textDecorationLine:hotel.service !== null && hotel.service.tours === 1 ? 'none' : 'line-through'}]}>Đứa khách thăm quan</Text>
             </View>
             <View style={HotelStyle.HotelSpecialItem}>
-              <FontAwesome name="motorcycle" size={16} />
-              <Text style={HotelStyle.SpecialTitle}>Cho thuê xe máy</Text>
+              <FontAwesome name="cc-diners-club" size={16} />
+              <Text style={[HotelStyle.SpecialTitle,{textDecorationLine:hotel.service !== null && hotel.service.night_club === 1 ? 'none' : 'line-through'}]}>Club đêm</Text>
             </View>
             <View style={HotelStyle.HotelSpecialItem}>
-              <FontAwesome name="clock-o" size={16} />
-              <Text style={HotelStyle.SpecialTitle}>Lễ tân 24h</Text>
+              <FontAwesome5 name="spa" size={16} />
+              <Text style={[HotelStyle.SpecialTitle,{textDecorationLine:hotel.service !== null && hotel.service.relax_spa === 1 ? 'none' : 'line-through'}]}>Spa</Text>
             </View>
             <View style={HotelStyle.HotelSpecialItem}>
-              <FontAwesome name="bell-o" size={16} />
-              <Text style={HotelStyle.SpecialTitle}>Báo thức</Text>
+              <MaterialCommunityIcons name="clover" size={16} />
+              <Text style={[HotelStyle.SpecialTitle,{textDecorationLine:hotel.service !== null && hotel.service.relax_massage === 1 ? 'none' : 'line-through'}]}>Massage</Text>
             </View>
             <View style={HotelStyle.HotelSpecialItem}>
-              <MaterialCommunityIcons name="airport" size={16} />
-              <Text style={HotelStyle.SpecialTitle}>Đưa/đón tại sân bay</Text>
+              <MaterialCommunityIcons name="steam-box" size={16} />
+              <Text style={[HotelStyle.SpecialTitle,{textDecorationLine:hotel.service !== null && hotel.service.relax_steam_room === 1 ? 'none' : 'line-through'}]}>Phòng tắm hơi</Text>
             </View>
             <View style={HotelStyle.HotelSpecialItem}>
-              <FontAwesome5 name="people-carry" size={16} />
-              <Text style={HotelStyle.SpecialTitle}>Giữ hành lý</Text>
+              <FontAwesome name="gamepad" size={16} />
+              <Text style={[HotelStyle.SpecialTitle,{textDecorationLine:hotel.service !== null && hotel.service.relax_outdoor_room === 1 ? 'none' : 'line-through'}]}>Phòng giải trí ngoài trời</Text>
             </View>
             <View style={HotelStyle.HotelSpecialItem}>
-              <MaterialCommunityIcons name="bread-slice-outline" size={16} />
-              <Text style={HotelStyle.SpecialTitle}>Bữa sáng tại phòng</Text>
+              <MaterialCommunityIcons name="pool" size={16} />
+              <Text style={[HotelStyle.SpecialTitle,{textDecorationLine:hotel.service !== null && hotel.service.relax_ourdoor_pool === 1 ? 'none' : 'line-through'}]}>Bể bơi ngoài trời</Text>
             </View>
             <View style={HotelStyle.HotelSpecialItem}>
-              <MaterialCommunityIcons name="home-currency-usd" size={16} />
-              <Text style={HotelStyle.SpecialTitle}>Thu đổi ngoại tệ</Text>
+              <MaterialCommunityIcons name="steam-box" size={16} />
+              <Text style={[HotelStyle.SpecialTitle,{textDecorationLine:hotel.service !== null && hotel.service.relax_sauna === 1 ? 'none' : 'line-through'}]}>Phòng tắm hơi</Text>
+            </View>
+            <View style={HotelStyle.HotelSpecialItem}>
+              <FontAwesome5 name="swimming-pool" size={16} />
+              <Text style={[HotelStyle.SpecialTitle,{textDecorationLine:hotel.service !== null && hotel.service.relax_pool === 1 ? 'none' : 'line-through'}]}>Bể bơi trong nhà</Text>
             </View>
           </View>
           <View style={HotelStyle.HotelDetailBox}>
@@ -143,7 +148,7 @@ export default function HotelScreen(props) {
           <View style={HotelStyle.DescriptionBox}>
             <Text style={MainStyle.H3}>Giới thiệu khách sạn</Text>
             <Text style={HotelStyle.Description}>
-              {hotel.description.trim()}
+              {hotel["basic-info"].description.trim()}
             </Text>
           </View>
         </View>
@@ -151,7 +156,7 @@ export default function HotelScreen(props) {
       <View style={HotelStyle.BtnBookBox}>
         <TouchableOpacity 
         onPress={()=>{
-          Linking.openURL(hotel.url);
+          Linking.openURL(hotel["basic-info"].url);
         }}
         style={HotelStyle.BtnBook}>
           <Text style={HotelStyle.BtnBookTitle}>Đặt phòng</Text>

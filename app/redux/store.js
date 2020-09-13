@@ -1,5 +1,7 @@
 import userReducer from './reducers/UserReducer';
-import { createStore } from 'redux';
+import searchReducer from './reducers/SearchReducer';
+import { createStore,combineReducers } from 'redux';
 
-const store = createStore(userReducer);
+const rootReducer = combineReducers({userReducer,searchReducer});
+const store = createStore(rootReducer);
 export default store;
