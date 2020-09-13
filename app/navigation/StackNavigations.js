@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import {useSelector,useDispatch} from 'react-redux';
-import {AddAction} from '../redux/actions/SearchAction';
+import {Search_AddAction} from '../redux/actions/SearchAction';
 import store from '../redux/store';
 
 import HomeScreen from "../screens/HomeScreen";
@@ -25,6 +25,7 @@ const HomeStack = createStackNavigator();
 
 export function HomeTab() {
   const keyword = useSelector(state => state.searchReducer.keyword);
+  const [curentKeyword,setCurrentKeyword] = React.useState(keyword);
 
   const HomeOptions = (props) => ({
     title: "SHECODES",
@@ -50,7 +51,7 @@ export function HomeTab() {
         <TouchableOpacity
           style={{ marginLeft: 10 }}
           onPress={() => {
-            Alert.alert("Thông báo", "Opening...");
+            Alert.alert("Thông báo", "Tính năng đang phát triển");
           }}
         >
           <FontAwesome name="bell" size={26} color="#fc5c65" />
@@ -78,11 +79,14 @@ export function HomeTab() {
             paddingVertical: 4,
             borderRadius: 10
           }}
-          onChangeText={value=>{
-            const addAction = AddAction(value);
+          onChange={value=>{
+            setCurrentKeyword(value.nativeEvent.text);
+          }}
+          onEndEditing={value=>{
+            const addAction = Search_AddAction({keyword: value.nativeEvent.text, searching: true});
             store.dispatch(addAction);
           }}
-          value={keyword}
+          value={curentKeyword}
           returnKeyType="search"
           placeholder="Nhập nơi đến"
         ></TextInput>

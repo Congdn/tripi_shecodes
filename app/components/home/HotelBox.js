@@ -16,7 +16,13 @@ export default function HotelBox(props) {
         style={HomeStyle.HotelBoxListItems}
         keyExtractor={(item) => item.id}
         renderItem={(entry) => (
-          <HotelItem image="" hotelId={entry.item.hotel_id} name={entry.item.name} description={entry.item.description}  nav={props.nav}></HotelItem>
+          <HotelItem image="" 
+          hotelId={entry.item.hotel_id} 
+          name={entry.item.name} 
+          description={entry.item.description}  
+          nav={props.nav}
+          images={entry.item["hotel-imgs"]}
+          ></HotelItem>
         )}
       />
     </View>

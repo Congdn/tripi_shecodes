@@ -8,7 +8,7 @@ export default function HotelItem(props) {
   const [showDetail, setShowDetail] = React.useState(false);
 
   const description = props.description.substring(0, props.description.indexOf(".")).trim();
-
+  const imageURL = props.images[2].src || null;
   return (
     <TouchableOpacity
       onPress={() => {
@@ -20,7 +20,7 @@ export default function HotelItem(props) {
       style={HomeStyle.HotelItem}
     >
       <Image
-        source={require("../../assets/images/156916041.jpg")}
+        source={{uri:imageURL}}
         style={{
           borderRadius: 10,
           width: 120,

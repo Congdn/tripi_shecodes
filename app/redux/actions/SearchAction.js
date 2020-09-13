@@ -1,7 +1,7 @@
-const AddAction = (data)=>{
+const Search_AddAction = (data)=>{
     return {
         type:'add',
         payload: data
     }
 }
-export {AddAction};
+export {Search_AddAction};
