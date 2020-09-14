@@ -161,7 +161,7 @@ const loadMoreHanle = ()=>{
             onEndReached={()=> loadMoreHanle()}
             ListFooterComponent={renderFooter(true)}
             renderItem={({ item }) =>
-              <HotelItem nav={props.navigation}></HotelItem>
+              <HotelItem nav={props.navigation} hotel={item}></HotelItem>
             }
           >
           </FlatList>
