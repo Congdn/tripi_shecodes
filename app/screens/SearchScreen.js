@@ -250,10 +250,20 @@ export default function SearchScreen(props) {
       </View>
       <View style={SearchStyle.btnSearchBox}>
         <TouchableOpacity
-          style={SearchStyle.btnSearch}
+          style={[SearchStyle.btnSearch,{
+            backgroundColor:location === null ? Colors.Gray : Colors.Primary
+          }]}
           onPress={() => {
             props.navigation.navigate("ListHotel",{
-              location:location
+              location:location,
+              dateRange:{
+                fromDate: fromDateTitle !== "" ? Moment(sDate).format("yyyyMMDD") : "",
+                toDate: toDateTitle !== "" ? Moment(eDate).format("yyyyMMDD") : ""
+              },
+              numberOfPerson:{
+                adult:adultsQuatity,
+                children:childrenQuatity
+              }
             });
           }}
           disabled={location === null ? true : false}

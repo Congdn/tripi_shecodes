@@ -9,11 +9,12 @@ export default function HotelItem(props) {
   const [showDetail, setShowDetail] = React.useState(false);
 
   const description = props.description.substring(0, props.description.indexOf(".")).trim();
-  const imageURL = props.images[getRandomInt(0,props.images.length - 1)].src || null;
-  console.log(imageURL);
+  //const imageURL = props.images[getRandomInt(0,props.images.length - 1)].src || null;
+  //console.log(imageURL);
   return (
     <TouchableOpacity
       onPress={() => {
+        console.log(props.hotelId);
         props.nav.navigate("Hotel",
           {
             hotel_id:props.hotelId
@@ -22,7 +23,7 @@ export default function HotelItem(props) {
       style={HomeStyle.HotelItem}
     >
       <Image
-        source={{uri:imageURL}}
+        source={require("../../assets/images/9399_ho_00_p_1024x768.jpg")}
         style={{
           borderRadius: 10,
           width: 120,

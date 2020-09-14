@@ -6,26 +6,27 @@ import {
   TouchableHighlight,
   FlatList,
   ScrollView,
-  Dimensions, ActivityIndicator
+  Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { FontAwesome, Feather, FontAwesome5 } from "@expo/vector-icons";
 import Colors from "../commons/Colors";
 import RBSheet from "react-native-raw-bottom-sheet";
 //import RangeSlider from 'react-native-range-slider-expo';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import MultiSlider from "@ptomasroos/react-native-multi-slider";
 
 import MainStyle from "../stylesheets/MainStyle";
 import ListHotelStyle from "../stylesheets/ListHotelStyle";
 
 import HotelItem from "../components/search/HotelItemComponent";
 import MapView, { Marker } from "react-native-maps";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
+import * as Config from "../config/AppConfig";
 
 const Format = (text, n, x) => {
-  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
-  return text.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
-}
-
+  var re = "\\d(?=(\\d{" + (x || 3) + "})+" + (n > 0 ? "\\." : "$") + ")";
+  return text.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, "g"), "$&,");
+};
 
 export default function ListHotelScreen(props) {
   const routeParams = props.route.params;
@@ -34,37 +35,48 @@ export default function ListHotelScreen(props) {
   const [hotelStar, setHotelStar] = React.useState(0);
   const [currentLocation, setCurrentLocation] = React.useState(null);
 
-  const [searchParams, setSearchParams] = React.useState({ location: routeParams.location });
-  const [paging, setPaging] = React.useState({ pageIndex: 1, pageSize: 10 });
+  const [searchParams, setSearchParams] = React.useState({
+    location: routeParams.location,
+    numberOfPerson: routeParams.numberOfPerson,
+    dateRange: routeParams.dateRange,
+  });
+  const [paging, setPaging] = React.useState({ pageIndex: 1, pageSize: 6 });
   const [hotels, setHotels] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [loadingMore, setLoadingMore]= React.useState(false);
+  //const [loading, setLoading] = React.useState(true);
+  //const [loadingMore, setLoadingMore] = React.useState(false);
 
   const refSortRBSheet = React.useRef();
   const refFilterRBSheet = React.useRef();
 
   const fetchHotels = () => {
-    (async ()=>{
-    await fetch(`https://tripi-shecodes.herokuapp.com/hotels/recommendation?latitude=${searchParams.location.latitude}&longitude=${searchParams.location.longitude}&page-index=${paging.pageIndex}&page-size=${paging.pageSize}`, null, 300000)
-      .then(response => response.json())
-      .then(result => {
-        //console.log(result);
-        if (result["status-code"] === 200) {
-          setHotels([...hotels,...result.data["paginated-hotels"]]);
-          setLoading(false);
-        }
-      })
-      .catch(error => console.log(error));
-    })()
-  }
-const loadMoreHanle = ()=>{
-  let pageindex = paging.pageIndex + 1;
-  setPaging({
-    pageIndex:pageindex,
-    pageSize:10
-  })
-  fetchHotels();
-}
+    (async () => {
+      //console.log(routeParams.searchParams);
+      let url = `${Config.API_DOMAIN}/hotels/search?latitude=${searchParams.location.latitude}&longitude=${searchParams.location.longitude}&num-adults=${searchParams.numberOfPerson.adult}&num-children=${searchParams.numberOfPerson.children}&checkin-date=${searchParams.dateRange.fromDate}&checkout-date=${searchParams.dateRange.toDate}&page-index=${paging.pageIndex}&page-size=${paging.pageSize}`;
+      //console.log(url);
+      await fetch(url, null, 300000)
+        .then((response) => response.json())
+        .then((result) => {
+          //console.log(result);
+          if (result["status-code"] === 200) {
+            if (hotels.length > 0)
+              setHotels([...hotels, ...result.data["hotels"]]);
+            else setHotels(result.data["hotels"]);
+            //setLoading(false);
+            //console.log(hotels);
+          }
+        })
+        .catch((error) => {console.log("Lỗi");console.log(error);});
+    })();
+  };
+  const loadMoreHandle = () => {
+    //console.log("loadmore")
+    let pageindex = paging.pageIndex + 1;
+    setPaging({
+      pageIndex: pageindex,
+      pageSize: 6,
+    });
+    fetchHotels();
+  };
   /* const loadmore = () => {
     setLoadingMore(false);
     setPaging({
@@ -75,23 +87,23 @@ const loadMoreHanle = ()=>{
   } */
 
   const renderFooter = (status) => {
-    return status ? <ActivityIndicator size="large" /> : null
-  }
+    return status ? <ActivityIndicator size="large" /> : null;
+  };
 
   React.useEffect(() => {
     setPaging({
       pageIndex: 1,
-      pageSize: 10
-    })
+      pageSize: 6,
+    });
     fetchHotels();
-  }, [searchParams])
+  }, []);
 
   const SetupCurrentLocation = () => {
     (async () => {
       const location = await Location.getCurrentPositionAsync();
       setCurrentLocation(location.coords);
     })();
-  }
+  };
   return (
     <View style={MainStyle.Container}>
       <View style={ListHotelStyle.Header}>
@@ -109,7 +121,8 @@ const loadMoreHanle = ()=>{
             onPress={() => {
               refFilterRBSheet.current.open();
             }}
-            style={ListHotelStyle.HeaderLeftItem}>
+            style={ListHotelStyle.HeaderLeftItem}
+          >
             <Feather name="filter" size={16} />
             <Text style={{ marginLeft: 5 }}>Bộ lọc</Text>
           </TouchableOpacity>
@@ -149,55 +162,68 @@ const loadMoreHanle = ()=>{
           </TouchableHighlight>
         </View>
       </View>
-      {loading ? <ActivityIndicator size="large"/> : <View>
-        {
-          listType === "List" &&
-          <FlatList
-            data={hotels}
-            //extraData={loadingMore}
-            style={{ marginTop: 10, marginBottom: 52 }}
-            //showsVerticalScrollIndicator={false}
-            onEndReachedThreshold={0.4}
-            onEndReached={()=> loadMoreHanle()}
-            ListFooterComponent={renderFooter(true)}
-            renderItem={({ item }) =>
-              <HotelItem nav={props.navigation} hotel={item}></HotelItem>
-            }
-          >
-          </FlatList>
-        }
+      {hotels.length === 0 ? (
+        <ActivityIndicator size="large" />
+      ) : (
+        <View>
+          {listType === "List" && (
+            <FlatList
+              data={hotels}
+              //extraData={loadingMore}
+              style={{ marginTop: 10, marginBottom: 52 }}
+              //showsVerticalScrollIndicator={false}
+              onEndReachedThreshold={0.4}
+              onEndReached={() => loadMoreHandle()}
+              ListFooterComponent={renderFooter(true)}
+              renderItem={({ item }) => (
+                <HotelItem nav={props.navigation} hotel={item} defaultAddress={searchParams.location}></HotelItem>
+              )}
+            ></FlatList>
+          )}
 
-        {
-          listType === "Map" &&
-          <MapView
-            style={ListHotelStyle.MapView}
-            initialRegion={{
-              latitude: currentLocation !== null ? currentLocation.latitude : 21.0021622,
-              longitude: currentLocation !== null ? currentLocation.longitude : 105.8056478,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.1
-            }}
-          >
-            <Marker
-              key={0}
-              coordinate={{
-                latitude: currentLocation !== null ? currentLocation.latitude : 21.0021622,
-                longitude: currentLocation !== null ? currentLocation.longitude : 105.8056478,
+          {listType === "Map" && (
+            <MapView
+              style={ListHotelStyle.MapView}
+              initialRegion={{
+                latitude:
+                  currentLocation !== null
+                    ? currentLocation.latitude
+                    : 21.0021622,
+                longitude:
+                  currentLocation !== null
+                    ? currentLocation.longitude
+                    : 105.8056478,
+                latitudeDelta: 0.1,
+                longitudeDelta: 0.1,
               }}
-              title="Vị trí của bạn"
-            ></Marker>
-            <Marker
-              key={1}
-              coordinate={{
-                latitude: 21,
-                longitude: 105.8,
-              }}
-              title="Khách sạn ngàn sao"
-              description="Mô tả khách sạn ngàn sao"
-            ></Marker>
-          </MapView>
-        }
-      </View>}
+            >
+              <Marker
+                key={0}
+                coordinate={{
+                  latitude:
+                    currentLocation !== null
+                      ? currentLocation.latitude
+                      : 21.0021622,
+                  longitude:
+                    currentLocation !== null
+                      ? currentLocation.longitude
+                      : 105.8056478,
+                }}
+                title="Vị trí của bạn"
+              ></Marker>
+              <Marker
+                key={1}
+                coordinate={{
+                  latitude: 21,
+                  longitude: 105.8,
+                }}
+                title="Khách sạn ngàn sao"
+                description="Mô tả khách sạn ngàn sao"
+              ></Marker>
+            </MapView>
+          )}
+        </View>
+      )}
 
       <RBSheet ref={refSortRBSheet} height={180}>
         <View style={ListHotelStyle.Popup}>
@@ -237,7 +263,7 @@ const loadMoreHanle = ()=>{
               onValueChanged={(low, high, fromUser) => {
                 
               }} */
-              /* fromValueOnChange={value => console.log(value)}
+            /* fromValueOnChange={value => console.log(value)}
               toValueOnChange={value => console.log(value)}
               min={20}
               max={40}
@@ -245,8 +271,7 @@ const loadMoreHanle = ()=>{
               fromKnobColor={Colors.Primary}
               toKnobColor={Colors.Danger}
               styleSize='small'
-              showRangeLabels={false} /> */
-            }
+              showRangeLabels={false} /> */}
             <View style={{ marginHorizontal: 20 }}>
               <MultiSlider
                 values={[0, 10000000]}
@@ -256,23 +281,42 @@ const loadMoreHanle = ()=>{
                 enabledOne={true}
                 enabledTwo={true}
                 enableLabel={true}
-                sliderLength={Dimensions.get('window').width - 70}
+                sliderLength={Dimensions.get("window").width - 70}
                 markerSize={20}
                 min={0}
                 max={10000000}
                 step={50000}
                 customMarkerLeft={(e) => {
-                  return (<View><FontAwesome name="dot-circle-o" size={28} /></View>)
+                  return (
+                    <View>
+                      <FontAwesome name="dot-circle-o" size={28} />
+                    </View>
+                  );
                 }}
-
                 customMarkerRight={(e) => {
-                  return (<View><FontAwesome name="dot-circle-o" size={28} /></View>)
+                  return (
+                    <View>
+                      <FontAwesome name="dot-circle-o" size={28} />
+                    </View>
+                  );
                 }}
                 customLabel={(value) => {
                   const leftVal = value.oneMarkerValue ?? 0;
                   const rightVal = value.twoMarkerValue ?? 10000000;
-                  const label = `${Format(leftVal)} VNĐ - ${Format(rightVal)} VNĐ`;
-                  return (<Text style={{ textAlign: 'right', fontSize: 16, color: Colors.Primary }}>{label}</Text>)
+                  const label = `${Format(leftVal)} VNĐ - ${Format(
+                    rightVal
+                  )} VNĐ`;
+                  return (
+                    <Text
+                      style={{
+                        textAlign: "right",
+                        fontSize: 16,
+                        color: Colors.Primary,
+                      }}
+                    >
+                      {label}
+                    </Text>
+                  );
                 }}
               />
             </View>
@@ -282,26 +326,38 @@ const loadMoreHanle = ()=>{
             <View style={ListHotelStyle.FilterStarBox}>
               <TouchableOpacity
                 onPress={() => setHotelStar(1)}
-                style={[{
-                  backgroundColor: hotelStar === 1 ? Colors.Medium : Colors.Gray
-                }, ListHotelStyle.FilterStar]}
+                style={[
+                  {
+                    backgroundColor:
+                      hotelStar === 1 ? Colors.Medium : Colors.Gray,
+                  },
+                  ListHotelStyle.FilterStar,
+                ]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setHotelStar(2)}
-                style={[{
-                  backgroundColor: hotelStar === 2 ? Colors.Medium : Colors.Gray
-                }, ListHotelStyle.FilterStar]}
+                style={[
+                  {
+                    backgroundColor:
+                      hotelStar === 2 ? Colors.Medium : Colors.Gray,
+                  },
+                  ListHotelStyle.FilterStar,
+                ]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setHotelStar(3)}
-                style={[{
-                  backgroundColor: hotelStar === 3 ? Colors.Medium : Colors.Gray
-                }, ListHotelStyle.FilterStar]}
+                style={[
+                  {
+                    backgroundColor:
+                      hotelStar === 3 ? Colors.Medium : Colors.Gray,
+                  },
+                  ListHotelStyle.FilterStar,
+                ]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
@@ -309,9 +365,13 @@ const loadMoreHanle = ()=>{
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setHotelStar(4)}
-                style={[{
-                  backgroundColor: hotelStar === 4 ? Colors.Medium : Colors.Gray
-                }, ListHotelStyle.FilterStar]}
+                style={[
+                  {
+                    backgroundColor:
+                      hotelStar === 4 ? Colors.Medium : Colors.Gray,
+                  },
+                  ListHotelStyle.FilterStar,
+                ]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
@@ -320,9 +380,13 @@ const loadMoreHanle = ()=>{
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setHotelStar(5)}
-                style={[{
-                  backgroundColor: hotelStar === 5 ? Colors.Medium : Colors.Gray
-                }, ListHotelStyle.FilterStar]}
+                style={[
+                  {
+                    backgroundColor:
+                      hotelStar === 5 ? Colors.Medium : Colors.Gray,
+                  },
+                  ListHotelStyle.FilterStar,
+                ]}
               >
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
                 <FontAwesome name="star" size={20} color={Colors.Secondary} />
@@ -332,12 +396,13 @@ const loadMoreHanle = ()=>{
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{ alignItems: 'center' }}>
+          <View style={{ alignItems: "center" }}>
             <TouchableOpacity
               style={ListHotelStyle.FilterButton}
               onPress={() => {
                 refFilterRBSheet.current.close();
-              }}>
+              }}
+            >
               <Text>Áp dụng</Text>
             </TouchableOpacity>
           </View>

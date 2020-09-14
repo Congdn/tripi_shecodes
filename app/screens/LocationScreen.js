@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
+  AsyncStorage,
 } from "react-native";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import MainStyle from "../stylesheets/MainStyle";
@@ -16,6 +17,7 @@ import * as Location from "expo-location";
 import { useSelector, useDispatch } from "react-redux";
 import { Search_AddAction } from "../redux/actions/SearchAction";
 import HotelItem from "../components/search/HotelItemComponent";
+import * as Config from "../config/AppConfig";
 
 export default function LocationScreen(props) {
   const routeParams = props.route.params;
@@ -31,7 +33,6 @@ export default function LocationScreen(props) {
   React.useEffect(() => {
     setCurrentSearching(true);
     (async () => {
-
       const currentLocation = await Location.getCurrentPositionAsync();
       const res = await Location.reverseGeocodeAsync(currentLocation.coords);
       setGeoLocation({
@@ -39,19 +40,22 @@ export default function LocationScreen(props) {
         country: res[0].country,
         isoCountryCode: res[0].isoCountryCode,
         name: res[0].name,
-        postalCode:res[0].postalCode,
+        postalCode: res[0].postalCode,
         region: res[0].region,
         street: res[0].street,
         latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude
+        longitude: currentLocation.coords.longitude,
       });
 
       //location
       setLocations([]);
       await fetch(
-        "https://tripi-shecodes.herokuapp.com/hotels/autocomplete?type=province&query=" +
-        keyword +
-        "&page-index=1&page-size=10", null, 120000
+        Config.API_DOMAIN +
+          "/hotels/autocomplete?type=province&query=" +
+          keyword +
+          "&page-index=1&page-size=10",
+        null,
+        120000
       )
         .then((response) => response.json())
         .then((result) => {
@@ -63,9 +67,14 @@ export default function LocationScreen(props) {
       //
       //hotel
       setHotels([]);
-      await fetch("https://tripi-shecodes.herokuapp.com/hotels/autocomplete?type=hotel&query=" +
-        keyword +
-        "&page-index=1&page-size=10", null, 180000)
+      await fetch(
+        Config.API_DOMAIN +
+          "/hotels/autocomplete?type=hotel&query=" +
+          keyword +
+          "&page-index=1&page-size=10",
+        null,
+        180000
+      )
         .then((response) => response.json())
         .then((result) => {
           //console.log(result);
@@ -78,13 +87,14 @@ export default function LocationScreen(props) {
 
       setCurrentSearching(false);
     })();
-
   }, [keyword]);
 
   return keyword !== "" ? (
     <View>
       <ScrollView>
-        {currentSearching ? <ActivityIndicator size="large" /> :
+        {currentSearching ? (
+          <ActivityIndicator size="large" />
+        ) : (
           <View style={SearchStyle.location}>
             <View style={SearchStyle.btnBoxLocation}>
               <Text style={MainStyle.H6}>Vị trí</Text>
@@ -93,7 +103,7 @@ export default function LocationScreen(props) {
                   return (
                     <TouchableOpacity
                       onPress={() => {
-                        routeParams.setlocation({
+                        const locationToSet = {
                           city: item.shortname,
                           country: "Việt Nam",
                           isoCountryCode: "VN",
@@ -102,15 +112,32 @@ export default function LocationScreen(props) {
                           region: item.name,
                           street: item.name,
                           latitude: item.latitude,
-                          longitude: item.longitude
-                        });
+                          longitude: item.longitude,
+                        };
+                        routeParams.setlocation(locationToSet);
+                        async () => {
+                          const locations_history = await AsyncStorage.getItem(
+                            "location_history"
+                          );
+                          AsyncStorage.setItem("location_history", [
+                            ...locations_history,
+                            locationToSet,
+                          ]);
+                        };
                         props.navigation.pop();
                       }}
-                      style={SearchStyle.btnLocationHistory}>
-                      <FontAwesome name="location-arrow" size={34} color="#000" />
+                      style={SearchStyle.btnLocationHistory}
+                    >
+                      <FontAwesome
+                        name="location-arrow"
+                        size={34}
+                        color="#000"
+                      />
                       <View style={SearchStyle.btnLocHisRight}>
                         <Text>{item.name}</Text>
-                        <Text style={SearchStyle.LocHisResult}>{item.code}</Text>
+                        <Text style={SearchStyle.LocHisResult}>
+                          {item.code}
+                        </Text>
                       </View>
                     </TouchableOpacity>
                   );
@@ -133,59 +160,89 @@ export default function LocationScreen(props) {
               ></FlatList>
             </View>
           </View>
-        }
+        )}
       </ScrollView>
     </View>
   ) : (
-      <View style={SearchStyle.location}>
-        <TouchableOpacity
-          style={[
-            SearchStyle.btnBoxLocation,
-            { flexDirection: "row", alignItems: "center" },
-          ]}
-          onPress={() => {
-            routeParams.setlocation(geoLocation);
-            props.navigation.pop();
-          }}
-        >
-          <MaterialIcons name="my-location" size={34} color="#fc5c65" />
-          <View style={SearchStyle.btnCurrentLocRight}>
-            <Text style={{ fontSize: 18, color: "#fc5c65", fontWeight: "bold" }}>
-              Quanh vị trí hiện tại
+    <View style={SearchStyle.location}>
+      <TouchableOpacity
+        style={[
+          SearchStyle.btnBoxLocation,
+          { flexDirection: "row", alignItems: "center" },
+        ]}
+        onPress={() => {
+          routeParams.setlocation(geoLocation);
+          async () => {
+            const locations_history = await AsyncStorage.getItem(
+              "location_history"
+            );
+            AsyncStorage.setItem("location_history", [
+              ...locations_history,
+              geoLocation,
+            ]);
+          };
+
+          props.navigation.pop();
+        }}
+      >
+        <MaterialIcons name="my-location" size={34} color="#fc5c65" />
+        <View style={SearchStyle.btnCurrentLocRight}>
+          <Text style={{ fontSize: 18, color: "#fc5c65", fontWeight: "bold" }}>
+            Quanh vị trí hiện tại
           </Text>
-            <Text>
-              {geoLocation !== null
-                ? `${geoLocation.street}, ${geoLocation.region}, ${geoLocation.country}`
-                : "Không tìm thấy vị trí của bạn, vui lòng bật định vị"}
-            </Text>
+          <Text>
+            {geoLocation !== null
+              ? `${geoLocation.street}, ${geoLocation.region}, ${geoLocation.country}`
+              : "Không tìm thấy vị trí của bạn, vui lòng bật định vị"}
+          </Text>
+        </View>
+      </TouchableOpacity>
+
+      <View style={SearchStyle.btnBoxLocation}>
+        <Text style={MainStyle.H6}>Lịch sử tìm kiếm</Text>
+
+        {/*(() => {
+          let history = [];
+          (async () => {
+            history = await AsyncStorage.getItem("location_history");
+          })();
+          console.log(history);
+          return history !== null && history.length > 0 ? (
+            <View>
+              {history.map((item, i) => (
+                <TouchableOpacity style={SearchStyle.btnLocationHistory}>
+                  <FontAwesome name="history" size={34} color="#000" />
+                  <View style={SearchStyle.btnLocHisRight}>
+                    <Text>Thanh Xuân</Text>
+                    <Text style={SearchStyle.LocHisResult}>1234 kết quả</Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : null;
+        })()*/}
+        <TouchableOpacity style={SearchStyle.btnLocationHistory}>
+          <FontAwesome name="history" size={34} color="#000" />
+          <View style={SearchStyle.btnLocHisRight}>
+            <Text>Thanh Xuân</Text>
+            <Text style={SearchStyle.LocHisResult}>1234 kết quả</Text>
           </View>
         </TouchableOpacity>
-
-        <View style={SearchStyle.btnBoxLocation}>
-          <Text style={MainStyle.H6}>Lịch sử tìm kiếm</Text>
-
-          <TouchableOpacity style={SearchStyle.btnLocationHistory}>
-            <FontAwesome name="history" size={34} color="#000" />
-            <View style={SearchStyle.btnLocHisRight}>
-              <Text>Thanh Xuân</Text>
-              <Text style={SearchStyle.LocHisResult}>1234 kết quả</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={SearchStyle.btnLocationHistory}>
-            <FontAwesome name="history" size={34} color="#000" />
-            <View style={SearchStyle.btnLocHisRight}>
-              <Text>Cầu giấy</Text>
-              <Text style={SearchStyle.LocHisResult}>4311 kết quả</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={SearchStyle.btnLocationHistory}>
-            <FontAwesome name="history" size={34} color="#000" />
-            <View style={SearchStyle.btnLocHisRight}>
-              <Text>Ba Đình</Text>
-              <Text style={SearchStyle.LocHisResult}>431 kết quả</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={SearchStyle.btnLocationHistory}>
+          <FontAwesome name="history" size={34} color="#000" />
+          <View style={SearchStyle.btnLocHisRight}>
+            <Text>Cầu giấy</Text>
+            <Text style={SearchStyle.LocHisResult}>4311 kết quả</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={SearchStyle.btnLocationHistory}>
+          <FontAwesome name="history" size={34} color="#000" />
+          <View style={SearchStyle.btnLocHisRight}>
+            <Text>Ba Đình</Text>
+            <Text style={SearchStyle.LocHisResult}>431 kết quả</Text>
+          </View>
+        </TouchableOpacity>
       </View>
-    );
+    </View>
+  );
 }

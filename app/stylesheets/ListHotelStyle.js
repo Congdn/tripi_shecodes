@@ -62,7 +62,7 @@ const ListHotelStyle = StyleSheet.create({
         justifyContent:'space-between'
     },
     ItemAverage:{
-        padding:2,
+        padding:4,
         borderRadius:5
     },
     ItemSupplier:{

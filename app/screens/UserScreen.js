@@ -25,7 +25,7 @@ export default function UserScreen() {
                         <Text>0357745871</Text>
                         <Text
                             style={UserStyle.UserCost}
-                        >150.000 VNĐ</Text>
+                        >1.000.000 VNĐ</Text>
                     </View>
                 </View>
                 <View style={UserStyle.ContentBox}>
