@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
   FlatList,
   ScrollView,
-  Dimensions
+  Dimensions, ActivityIndicator
 } from "react-native";
 import { FontAwesome, Feather, FontAwesome5 } from "@expo/vector-icons";
 import Colors from "../commons/Colors";
@@ -28,14 +28,65 @@ const Format = (text, n, x) => {
 
 
 export default function ListHotelScreen(props) {
+  const routeParams = props.route.params;
+
   const [listType, setListType] = React.useState("List");
   const [hotelStar, setHotelStar] = React.useState(0);
   const [currentLocation, setCurrentLocation] = React.useState(null);
 
+  const [searchParams, setSearchParams] = React.useState({ location: routeParams.location });
+  const [paging, setPaging] = React.useState({ pageIndex: 1, pageSize: 10 });
+  const [hotels, setHotels] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [loadingMore, setLoadingMore]= React.useState(false);
+
   const refSortRBSheet = React.useRef();
   const refFilterRBSheet = React.useRef();
 
-  const SetCurrentLocation = () => {
+  const fetchHotels = () => {
+    (async ()=>{
+    await fetch(`https://tripi-shecodes.herokuapp.com/hotels/recommendation?latitude=${searchParams.location.latitude}&longitude=${searchParams.location.longitude}&page-index=${paging.pageIndex}&page-size=${paging.pageSize}`, null, 300000)
+      .then(response => response.json())
+      .then(result => {
+        //console.log(result);
+        if (result["status-code"] === 200) {
+          setHotels([...hotels,...result.data["paginated-hotels"]]);
+          setLoading(false);
+        }
+      })
+      .catch(error => console.log(error));
+    })()
+  }
+const loadMoreHanle = ()=>{
+  let pageindex = paging.pageIndex + 1;
+  setPaging({
+    pageIndex:pageindex,
+    pageSize:10
+  })
+  fetchHotels();
+}
+  /* const loadmore = () => {
+    setLoadingMore(false);
+    setPaging({
+      pageIndex: paging.pageIndex + 1,
+      pageSize: 10
+    })
+    fetchHotels();
+  } */
+
+  const renderFooter = (status) => {
+    return status ? <ActivityIndicator size="large" /> : null
+  }
+
+  React.useEffect(() => {
+    setPaging({
+      pageIndex: 1,
+      pageSize: 10
+    })
+    fetchHotels();
+  }, [searchParams])
+
+  const SetupCurrentLocation = () => {
     (async () => {
       const location = await Location.getCurrentPositionAsync();
       setCurrentLocation(location.coords);
@@ -87,7 +138,7 @@ export default function ListHotelScreen(props) {
               ListHotelStyle.ListType,
             ]}
             onPress={() => {
-              SetCurrentLocation();
+              SetupCurrentLocation();
               setListType("Map");
             }}
           >
@@ -98,53 +149,55 @@ export default function ListHotelScreen(props) {
           </TouchableHighlight>
         </View>
       </View>
-      {
-        listType === "List" &&
-        <ScrollView
-          style={{ marginTop: 10, marginBottom: 20 }}
-          showsVerticalScrollIndicator={false}
-        >
-          <HotelItem nav={props.navigation}></HotelItem>
-          <HotelItem nav={props.navigation}></HotelItem>
-          <HotelItem nav={props.navigation}></HotelItem>
-          <HotelItem nav={props.navigation}></HotelItem>
-          <HotelItem nav={props.navigation}></HotelItem>
-          <HotelItem nav={props.navigation}></HotelItem>
-          <HotelItem nav={props.navigation}></HotelItem>
-          <HotelItem nav={props.navigation}></HotelItem>
-        </ScrollView>
-      }
+      {loading ? <ActivityIndicator size="large"/> : <View>
+        {
+          listType === "List" &&
+          <FlatList
+            data={hotels}
+            //extraData={loadingMore}
+            style={{ marginTop: 10, marginBottom: 52 }}
+            //showsVerticalScrollIndicator={false}
+            onEndReachedThreshold={0.4}
+            onEndReached={()=> loadMoreHanle()}
+            ListFooterComponent={renderFooter(true)}
+            renderItem={({ item }) =>
+              <HotelItem nav={props.navigation}></HotelItem>
+            }
+          >
+          </FlatList>
+        }
 
-      {
-        listType === "Map" &&
-        <MapView
-          style={ListHotelStyle.MapView}
-          initialRegion={{
-            latitude: currentLocation !== null ? currentLocation.latitude : 21.0021622,
-            longitude: currentLocation !== null ? currentLocation.longitude : 105.8056478,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.1
-          }}
-        >
-          <Marker
-            key={0}
-            coordinate={{
+        {
+          listType === "Map" &&
+          <MapView
+            style={ListHotelStyle.MapView}
+            initialRegion={{
               latitude: currentLocation !== null ? currentLocation.latitude : 21.0021622,
               longitude: currentLocation !== null ? currentLocation.longitude : 105.8056478,
+              latitudeDelta: 0.1,
+              longitudeDelta: 0.1
             }}
-            title="Vị trí của bạn"
-          ></Marker>
-          <Marker
-            key={1}
-            coordinate={{
-              latitude: 21,
-              longitude: 105.8,
-            }}
-            title="Khách sạn ngàn sao"
-            description="Mô tả khách sạn ngàn sao"
-          ></Marker>
-        </MapView>
-      }
+          >
+            <Marker
+              key={0}
+              coordinate={{
+                latitude: currentLocation !== null ? currentLocation.latitude : 21.0021622,
+                longitude: currentLocation !== null ? currentLocation.longitude : 105.8056478,
+              }}
+              title="Vị trí của bạn"
+            ></Marker>
+            <Marker
+              key={1}
+              coordinate={{
+                latitude: 21,
+                longitude: 105.8,
+              }}
+              title="Khách sạn ngàn sao"
+              description="Mô tả khách sạn ngàn sao"
+            ></Marker>
+          </MapView>
+        }
+      </View>}
 
       <RBSheet ref={refSortRBSheet} height={180}>
         <View style={ListHotelStyle.Popup}>

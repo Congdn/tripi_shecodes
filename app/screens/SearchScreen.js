@@ -19,6 +19,7 @@ import { Search_AddAction } from "../redux/actions/SearchAction";
 
 export default function SearchScreen(props) {
   const dispatch = useDispatch();
+  const routeParams = props.route.params;
 
   const [location, setLocation] = React.useState(null);
   const [fromDateTitle, setFromDateTitle] = React.useState("");
@@ -71,12 +72,8 @@ export default function SearchScreen(props) {
           </View>
           <TouchableOpacity
             onPress={() => {
-             /*  dispatch(
-                Search_AddAction({
-                  keyword: "",
-                  searching: false,
-                })
-              ); */
+              //console.log(props);
+              dispatch(Search_AddAction(""));
               props.navigation.navigate("Location", {
                 setlocation: setLocation,
               });
@@ -255,9 +252,11 @@ export default function SearchScreen(props) {
         <TouchableOpacity
           style={SearchStyle.btnSearch}
           onPress={() => {
-            props.navigation.navigate("ListHotel");
-            //Alert.alert("Thông báo", "Searching...")
+            props.navigation.navigate("ListHotel",{
+              location:location
+            });
           }}
+          disabled={location === null ? true : false}
         >
           <Text style={SearchStyle.btnSearchText}>Tìm kiếm</Text>
         </TouchableOpacity>

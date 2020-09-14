@@ -79,14 +79,15 @@ export function HomeTab() {
             paddingVertical: 4,
             borderRadius: 10
           }}
-          onChange={value=>{
+          /* onChange={value=>{
             setCurrentKeyword(value.nativeEvent.text);
-          }}
+          }} */
           onEndEditing={value=>{
-            const addAction = Search_AddAction({keyword: value.nativeEvent.text, searching: true});
+            if(keyword === value.nativeEvent.text) return;
+            const addAction = Search_AddAction(value.nativeEvent.text);
             store.dispatch(addAction);
           }}
-          value={curentKeyword}
+          //value={keyword}
           returnKeyType="search"
           placeholder="Nhập nơi đến"
         ></TextInput>

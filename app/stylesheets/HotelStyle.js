@@ -12,13 +12,13 @@ const HotelStyle = StyleSheet.create({
   },
   ScopeBox: {
     flexDirection: "row",
-    width: 90,
-    justifyContent: "space-between",
+    //width: 120,
+    //justifyContent: "space-between",
     marginTop: 5,
   },
   Location: {
     flexDirection: "row",
-    marginTop: 5,
+    marginTop: 10,
   },
   LocationText: {
     marginLeft: 5,
@@ -100,6 +100,10 @@ const HotelStyle = StyleSheet.create({
       marginTop:5,
       paddingHorizontal:5,
       textAlign:'justify'
+  },
+  Map:{
+    marginTop:10,
+    borderRadius:20
   }
 });
 export default HotelStyle;
