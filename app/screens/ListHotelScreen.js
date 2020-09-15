@@ -90,12 +90,8 @@ export default function ListHotelScreen(props) {
   };
 
   React.useEffect(() => {
-    setPaging({
-      pageIndex: 1,
-      pageSize: 6,
-    });
     fetchHotels();
-  }, []);
+  }, [searchParams]);
 
   const SetupCurrentLocation = () => {
     (async () => {
@@ -173,6 +169,7 @@ export default function ListHotelScreen(props) {
               //showsVerticalScrollIndicator={false}
               onEndReachedThreshold={0.4}
               onEndReached={() => loadMoreHandle()}
+              keyExtractor={(item)=>item.id}
               ListFooterComponent={renderFooter(true)}
               renderItem={({ item }) => (
                 <HotelItem

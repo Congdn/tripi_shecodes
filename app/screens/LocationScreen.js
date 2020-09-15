@@ -84,7 +84,7 @@ export default function LocationScreen(props) {
         })
         .catch((error) => console.log(error));
       //
-
+      //dispatch(Search_AddAction(keyword));
       setCurrentSearching(false);
     })();
   }, [keyword]);
@@ -145,19 +145,29 @@ export default function LocationScreen(props) {
             </View>
             <View style={SearchStyle.btnBoxLocation}>
               <Text style={MainStyle.H6}>Khách sạn</Text>
-              <FlatList
+
+              {hotels.length > 0
+                ? hotels.map((item, i) => (
+                    <HotelItem
+                      nav={props.navigation}
+                      isAutocomplete={true}
+                      hotel={item}
+                      defaultAddress={{
+                        region: "Không tìm thấy vị trí",
+                        country: "",
+                      }}
+                    ></HotelItem>
+                    ))
+                : null}
+              {/* <FlatList
                 data={hotels}
                 style={{ marginTop: 10 }}
                 showsVerticalScrollIndicator={false}
                 //keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                  <HotelItem
-                    nav={props.navigation}
-                    isAutocomplete={true}
-                    hotel={item}
-                  ></HotelItem>
+                  
                 )}
-              ></FlatList>
+              ></FlatList> */}
             </View>
           </View>
         )}
