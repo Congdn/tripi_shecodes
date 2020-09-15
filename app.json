@@ -13,9 +13,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -24,7 +22,12 @@
     },
     "description": "",
     "android": {
-      "package": "com.congdn.tripi_shecodes"
+      "package": "com.congdn.tripi_shecodes",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyADmeczqxjtqK2lPOK_aBnUxFLMAX038m8"
+        }
+      }
     }
   }
 }

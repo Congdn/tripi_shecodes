@@ -45,7 +45,7 @@ const renderdata= ()=>{
         await Location.getCurrentPositionAsync().then((value) => {
           currentLocation = value.coords;
         });
-        console.log(nearPaging);
+        //console.log(nearPaging);
         const locationURL = currentLocation
           ? `${Config.API_DOMAIN}/hotels/recommendation/nearbys?latitude=${currentLocation.latitude}&longitude=${currentLocation.longitude}&page-index=${nearPaging.pageindex}&page-size=${nearPaging.pagesize}`
           : `${Config.API_DOMAIN}/hotels/recommendation/nearbys?latitude=21.028334&longitude=105.853334&page-index=${nearPaging.pageindex}&page-size=${nearPaging.pagesize}`;
