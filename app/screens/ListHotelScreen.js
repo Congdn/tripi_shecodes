@@ -22,11 +22,7 @@ import HotelItem from "../components/search/HotelItemComponent";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Config from "../config/AppConfig";
-
-const Format = (text, n, x) => {
-  var re = "\\d(?=(\\d{" + (x || 3) + "})+" + (n > 0 ? "\\." : "$") + ")";
-  return text.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, "g"), "$&,");
-};
+import * as Helper from "../commons/Helper";
 
 export default function ListHotelScreen(props) {
   const routeParams = props.route.params;
@@ -65,7 +61,10 @@ export default function ListHotelScreen(props) {
             //console.log(hotels);
           }
         })
-        .catch((error) => {console.log("Lỗi");console.log(error);});
+        .catch((error) => {
+          console.log("Lỗi");
+          console.log(error);
+        });
     })();
   };
   const loadMoreHandle = () => {
@@ -176,7 +175,11 @@ export default function ListHotelScreen(props) {
               onEndReached={() => loadMoreHandle()}
               ListFooterComponent={renderFooter(true)}
               renderItem={({ item }) => (
-                <HotelItem nav={props.navigation} hotel={item} defaultAddress={searchParams.location}></HotelItem>
+                <HotelItem
+                  nav={props.navigation}
+                  hotel={item}
+                  defaultAddress={searchParams.location}
+                ></HotelItem>
               )}
             ></FlatList>
           )}
@@ -211,15 +214,17 @@ export default function ListHotelScreen(props) {
                 }}
                 title="Vị trí của bạn"
               ></Marker>
-              <Marker
-                key={1}
-                coordinate={{
-                  latitude: 21,
-                  longitude: 105.8,
-                }}
-                title="Khách sạn ngàn sao"
-                description="Mô tả khách sạn ngàn sao"
-              ></Marker>
+              {hotels.map((hotel, i) => (
+                <Marker
+                  key={hotel.id}
+                  coordinate={{
+                    latitude: hotel.latitude,
+                    longitude: hotel.longitude,
+                  }}
+                  title={hotel.name}
+                  description={hotel.description}
+                ></Marker>
+              ))}
             </MapView>
           )}
         </View>
@@ -303,7 +308,7 @@ export default function ListHotelScreen(props) {
                 customLabel={(value) => {
                   const leftVal = value.oneMarkerValue ?? 0;
                   const rightVal = value.twoMarkerValue ?? 10000000;
-                  const label = `${Format(leftVal)} VNĐ - ${Format(
+                  const label = `${Helper.numberTocurrency(leftVal)} VNĐ - ${Helper.numberTocurrency(
                     rightVal
                   )} VNĐ`;
                   return (

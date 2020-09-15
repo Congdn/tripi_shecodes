@@ -1,6 +1,9 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet,Dimensions  } from "react-native";
 import Colors from "../commons/Colors";
 import MainStyle from "./MainStyle";
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const ListHotelStyle = StyleSheet.create({
     Header:{
@@ -57,9 +60,9 @@ const ListHotelStyle = StyleSheet.create({
     },
     ItemScopeBox:{
         flexDirection:'row',
-        width:'44%',
+        width:'100%',
         marginTop:5,
-        justifyContent:'space-between'
+        //justifyContent:'space-between'
     },
     ItemAverage:{
         padding:4,
@@ -67,14 +70,17 @@ const ListHotelStyle = StyleSheet.create({
     },
     ItemSupplier:{
         flexDirection:'row',
-        paddingLeft:'24%'
+        width:windowWidth-140,
+        justifyContent:'flex-end'
+        //justifyContent:'center'
     },
     ItemSupplierDropBox:{
         flexDirection:'row',
         marginLeft:5,
         backgroundColor:Colors.Gray,
         paddingVertical:2,
-        paddingLeft:10,
+        paddingLeft:30,
+        paddingRight:20,
         borderRadius:20,
     },
     ItemSupplierTitle:{
@@ -85,8 +91,10 @@ const ListHotelStyle = StyleSheet.create({
         fontSize:20,
         fontWeight:'bold',
         color:Colors.Danger,
-        textAlign:'right',
-        paddingRight:20
+        //textAlign:'right',
+        //paddingRight:20,
+        width:windowWidth-140,
+        textAlign:'right'
     },
     Popup:{
         padding:10,

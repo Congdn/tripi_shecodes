@@ -104,6 +104,17 @@ const HotelStyle = StyleSheet.create({
   Map:{
     marginTop:10,
     borderRadius:20
+  },
+  ForYouBox:{
+    backgroundColor:Colors.White,
+    borderRadius:10,
+    marginTop:10,
+  },
+  ForYouTitle:{
+    fontSize:24,
+    margin:10,
+    fontWeight:'bold',
+    color:Colors.Secondary
   }
 });
 export default HotelStyle;

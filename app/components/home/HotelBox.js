@@ -29,7 +29,7 @@ export default function HotelBox(props) {
         showsHorizontalScrollIndicator={false}
         data={props.DATA}
         style={HomeStyle.HotelBoxListItems}
-        //keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={(entry) => (
           <HotelItem
             image=""

@@ -14,7 +14,7 @@ export default function HotelItem(props) {
   return (
     <TouchableOpacity
       onPress={() => {
-        console.log(props.hotelId);
+        //console.log(props.hotelId);
         props.nav.navigate("Hotel",
           {
             hotel_id:props.hotelId

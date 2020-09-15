@@ -52,7 +52,6 @@ const renderdata= ()=>{
         //
   
         //watch a lot
-  
         fetch(
           `${Config.API_DOMAIN}/hotels/recommendation/most-watched?page-index=${watchPaging.pageindex}&page-size=${watchPaging.pagesize}`,
           null,

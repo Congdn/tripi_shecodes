@@ -16,4 +16,8 @@ const formatDate = (date)=> {
 
     return [year, month, day].join('');
 }
-export {getRandomInt,formatDate};
+const numberTocurrency = (text, n, x) => {
+    var re = "\\d(?=(\\d{" + (x || 3) + "})+" + (n > 0 ? "\\." : "$") + ")";
+    return text.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, "g"), "$&,");
+  };
+export {getRandomInt,formatDate,numberTocurrency};

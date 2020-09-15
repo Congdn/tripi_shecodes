@@ -5,18 +5,23 @@ import { FontAwesome, EvilIcons, MaterialIcons } from "@expo/vector-icons";
 import Colors from "../../commons/Colors";
 import MainStyle from "../../stylesheets/MainStyle";
 import ListHotelStyle from "../../stylesheets/ListHotelStyle";
+import * as Helper from "../../commons/Helper";
 
 export default function HotelItem(props) {
   const [supplier, setSupplier] = React.useState();
-
+  const price = Helper.numberTocurrency(Helper.getRandomInt(100000,5000000));
   const star =
     typeof props.hotel.star_number === "undefined"
       ? 0
       : Number(props.hotel.star_number);
-  console.log(star);
+  //console.log(props);
   return (
     <TouchableOpacity
       onPress={() => {
+        if(typeof(props.setReload) !== "undefined" && typeof(props.reload) !== "undefined"){
+          setReload(!props.reload);
+          return;
+        }
         props.nav.navigate("Hotel", {
           hotel_id: props.hotel.hotel_id
             ? props.hotel.hotel_id
@@ -64,26 +69,23 @@ export default function HotelItem(props) {
           <View>
             <View style={ListHotelStyle.ItemSupplier}>
               <Text style={{ color: Colors.Medium }}>Nhà cung cấp</Text>
-              {/* <Picker
-            selectedValue={supplier}
-            onValueChange={(value, index) => {
-              setSupplier(value);
-            }}
-          >
-            <Picker.Item label="Booking.com" value="Booking" />
-            <Picker.Item label="Agoda.com" value="Agoda" />
-          </Picker> */}
               <TouchableOpacity
                 onPress={() => {
-                  props.nav.navigate("Supplier");
+                  props.nav.navigate("Supplier",{
+                    hotel_id: props.hotel.hotel_id ? props.hotel.hotel_id : props.hotel.id,
+                    supplierName:props.hotel.domain_name,
+                    hotelName: props.hotel.name,
+                    price: price,
+                    randomSuplier: Helper.getRandomInt(1,5)
+                  });
                 }}
                 style={ListHotelStyle.ItemSupplierDropBox}
               >
-                <Text style={ListHotelStyle.ItemSupplierTitle}>Booking</Text>
+                <Text style={ListHotelStyle.ItemSupplierTitle}>{props.hotel.domain_name}</Text>
                 <MaterialIcons name="arrow-drop-down" size={20} />
               </TouchableOpacity>
             </View>
-            <Text style={ListHotelStyle.ItemPrice}>400.000 VNĐ</Text>
+            <Text style={ListHotelStyle.ItemPrice}>{price} VNĐ</Text>
           </View>
         )}
         <Text></Text>

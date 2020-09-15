@@ -23,31 +23,34 @@ import HotelStyle from "../stylesheets/HotelStyle";
 import Colors from "../commons/Colors";
 import * as Config from "../config/AppConfig";
 import * as Helper from "../commons/Helper";
+import HotelItem from "../components/search/HotelItemComponent";
 
 export default function HotelScreen(props) {
   const routeParams = props.route.params;
 
   const [hotel, setHotel] = React.useState(null);
+  const [reload, setReload] = React.useState(false);
 
   React.useEffect(() => {
     const currentDate = new Date();
     const tomorrow = currentDate.setDate(currentDate.getDate() + 1);
-
-    fetch(
-      `${Config.API_DOMAIN}/hotels/search?hotel-id=${
-        routeParams.hotel_id
-      }&num-adults=1&num-children=0&checkin-date=${Helper.formatDate(
-        currentDate
-      )}&checkout-date=${Helper.formatDate(tomorrow)}`
-    )
-      .then((response) => response.json())
-      .then((res) => {
-        if (res["status-code"] === 200) {
-          setHotel(res.data);
-        }
-      })
-      .catch((error) => Alert.alert("Thông báo", "Lỗi khi gọi server"));
-    //console.log(hotel);
+    (async () => {
+      fetch(
+        `${Config.API_DOMAIN}/hotels/search?hotel-id=${
+          routeParams.hotel_id
+        }&num-adults=1&num-children=0&checkin-date=${Helper.formatDate(
+          currentDate
+        )}&checkout-date=${Helper.formatDate(tomorrow)}`
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          if (res["status-code"] === 200) {
+            setHotel(res.data);
+          }
+        })
+        .catch((error) => {console.log(error); Alert.alert("Thông báo", "Lỗi khi gọi server");});
+    })();
+    //console.log(hotel)
   }, []);
   return hotel === null ? (
     <ActivityIndicator size="large" />
@@ -361,8 +364,27 @@ export default function HotelScreen(props) {
               {hotel["basic-info"].description.trim().replace("<br/>", "\n")}
             </Text>
           </View>
+          {hotel["related-hotels"] !== null &&
+          hotel["related-hotels"]["nums-hotel"] > 0 ? (
+            <View style={HotelStyle.ForYouBox}>
+              <Text style={HotelStyle.ForYouTitle}>Dành cho bạn</Text>
+              {hotel["related-hotels"]["paginated-hotels"].map((value, i) => (
+                <HotelItem
+                  nav={props.navigation}
+                  hotel={value}
+                  defaultAddress={{
+                    region:"",
+                    country:""
+                  }}
+                  setReload={setReload}
+                  reload={reload}
+                ></HotelItem>
+              ))}
+            </View>
+          ) : null}
         </View>
       </ScrollView>
+
       <View style={HotelStyle.BtnBookBox}>
         <TouchableOpacity
           onPress={() => {
