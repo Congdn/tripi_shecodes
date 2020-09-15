@@ -10,11 +10,11 @@ export default function HotelBox(props) {
   }
 
   const loadMoreHandle = ()=>{
-    let pageindex = props.paging.pageindex + 1;
-    props.setPaging({
-      pageIndex:pageindex,
+    //let pageindex = props.paging.pageindex + 1;
+    props.setPaging = {
+      pageIndex:props.setPaging.pageindex++,
       pageSize:5
-    })
+    }
     props.renderdata();
   }
 
@@ -29,7 +29,7 @@ export default function HotelBox(props) {
         showsHorizontalScrollIndicator={false}
         data={props.DATA}
         style={HomeStyle.HotelBoxListItems}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={(entry) => (
           <HotelItem
             image=""

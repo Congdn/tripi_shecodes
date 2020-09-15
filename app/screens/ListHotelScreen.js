@@ -24,6 +24,10 @@ import * as Location from "expo-location";
 import * as Config from "../config/AppConfig";
 import * as Helper from "../commons/Helper";
 
+let paging = {
+  pageIndex: 1, 
+  pageSize: 6
+}
 export default function ListHotelScreen(props) {
   const routeParams = props.route.params;
 
@@ -36,7 +40,7 @@ export default function ListHotelScreen(props) {
     numberOfPerson: routeParams.numberOfPerson,
     dateRange: routeParams.dateRange,
   });
-  const [paging, setPaging] = React.useState({ pageIndex: 1, pageSize: 6 });
+  //const [paging, setPaging] = React.useState({ pageIndex: 1, pageSize: 6 });
   const [hotels, setHotels] = React.useState([]);
   //const [loading, setLoading] = React.useState(true);
   //const [loadingMore, setLoadingMore] = React.useState(false);
@@ -46,7 +50,7 @@ export default function ListHotelScreen(props) {
 
   const fetchHotels = () => {
     (async () => {
-      //console.log(routeParams.searchParams);
+      //console.log(paging);
       let url = `${Config.API_DOMAIN}/hotels/search?latitude=${searchParams.location.latitude}&longitude=${searchParams.location.longitude}&num-adults=${searchParams.numberOfPerson.adult}&num-children=${searchParams.numberOfPerson.children}&checkin-date=${searchParams.dateRange.fromDate}&checkout-date=${searchParams.dateRange.toDate}&page-index=${paging.pageIndex}&page-size=${paging.pageSize}`;
       //console.log(url);
       await fetch(url, null, 300000)
@@ -61,29 +65,19 @@ export default function ListHotelScreen(props) {
             //console.log(hotels);
           }
         })
-        .catch((error) => {
-          console.log("Lỗi");
-          console.log(error);
-        });
+        .catch((error) => 
+          console.log(error)
+        );
     })();
   };
   const loadMoreHandle = () => {
-    //console.log("loadmore")
     let pageindex = paging.pageIndex + 1;
-    setPaging({
+    paging = {
       pageIndex: pageindex,
       pageSize: 6,
-    });
+    };
     fetchHotels();
   };
-  /* const loadmore = () => {
-    setLoadingMore(false);
-    setPaging({
-      pageIndex: paging.pageIndex + 1,
-      pageSize: 10
-    })
-    fetchHotels();
-  } */
 
   const renderFooter = (status) => {
     return status ? <ActivityIndicator size="large" /> : null;
@@ -166,10 +160,10 @@ export default function ListHotelScreen(props) {
               data={hotels}
               //extraData={loadingMore}
               style={{ marginTop: 10, marginBottom: 52 }}
-              //showsVerticalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               onEndReachedThreshold={0.4}
               onEndReached={() => loadMoreHandle()}
-              keyExtractor={(item)=>item.id}
+              keyExtractor={(item)=>item.id.toString()}
               ListFooterComponent={renderFooter(true)}
               renderItem={({ item }) => (
                 <HotelItem
@@ -211,12 +205,12 @@ export default function ListHotelScreen(props) {
                 }}
                 title="Vị trí của bạn"
               ></Marker>
-              {hotels.map((hotel, i) => (
+              {hotels.map((hotel, i) =>  (
                 <Marker
                   key={hotel.id}
                   coordinate={{
-                    latitude: hotel.latitude,
-                    longitude: hotel.longitude,
+                    latitude: hotel.latitude ? Number(hotel.latitude) : 0,
+                    longitude: hotel.longitude ? Number(hotel.longitude) : 0,
                   }}
                   title={hotel.name}
                   description={hotel.description}

@@ -12,6 +12,14 @@ import HotelBox from "../components/home/HotelBox";
 import * as Location from "expo-location";
 import * as Config from "../config/AppConfig";
 
+const nearPaging ={
+    pageindex: 1,
+    pagesize: 5,
+};
+const watchPaging ={
+    pageindex: 1,
+    pagesize: 5,
+};
 export default function HomeScreen(props) {
   /* const dispatch = useDispatch();
     const Logout=()=>{
@@ -19,16 +27,16 @@ export default function HomeScreen(props) {
         dispatch(logout);
     } */
   const [nearHotels, setNearHotels] = React.useState([]);
-  const [nearPaging, setNearPaging] = React.useState({
+  /* const [nearPaging, setNearPaging] = React.useState({
     pageindex: 1,
     pagesize: 5,
-  });
+  }); */
   const [watchHotels, setWatchHotels] = React.useState([]);
-  const [watchPaging, setWatchPaging] = React.useState({
+  /* const [watchPaging, setWatchPaging] = React.useState({
     pageindex: 1,
     pagesize: 5,
-  });
-  const [forUserHotels, setForUserHotels] = React.useState([]);
+  }); */
+  //const [forUserHotels, setForUserHotels] = React.useState([]);
 
 const renderdata= ()=>{
     (async () => {
@@ -37,6 +45,7 @@ const renderdata= ()=>{
         await Location.getCurrentPositionAsync().then((value) => {
           currentLocation = value.coords;
         });
+        console.log(nearPaging);
         const locationURL = currentLocation
           ? `${Config.API_DOMAIN}/hotels/recommendation/nearbys?latitude=${currentLocation.latitude}&longitude=${currentLocation.longitude}&page-index=${nearPaging.pageindex}&page-size=${nearPaging.pagesize}`
           : `${Config.API_DOMAIN}/hotels/recommendation/nearbys?latitude=21.028334&longitude=105.853334&page-index=${nearPaging.pageindex}&page-size=${nearPaging.pagesize}`;
@@ -86,7 +95,7 @@ const renderdata= ()=>{
           title="Xem nhiều"
           nav={props.navigation}
           paging={watchPaging}
-          setPaging={setWatchPaging}
+          setPaging={watchPaging}
           renderdata={renderdata}
         ></HotelBox>
       )}
@@ -98,7 +107,7 @@ const renderdata= ()=>{
           title="Gần đây"
           nav={props.navigation}
           paging={nearPaging}
-          setPaging={setNearPaging}
+          setPaging={nearPaging}
           renderdata={renderdata}
         ></HotelBox>
       )}
