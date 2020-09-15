@@ -47,10 +47,12 @@ export default function HotelScreen(props) {
           if (res["status-code"] === 200) {
             setHotel(res.data);
           }
+          else if(res["status-code"] === 400){
+            Alert.alert("Thông báo","Không tìm thấy thông tin khách sạn");
+          }
         })
         .catch((error) => {console.log(error); Alert.alert("Thông báo", "Lỗi khi gọi server");});
     })();
-    //console.log(hotel)
   }, []);
   return hotel === null ? (
     <ActivityIndicator size="large" />
