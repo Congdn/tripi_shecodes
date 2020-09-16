@@ -73,7 +73,7 @@ export default function SearchScreen(props) {
           <TouchableOpacity
             onPress={() => {
               //console.log(props);
-              //dispatch(Search_AddAction(""));
+              dispatch(Search_AddAction(""));
               props.navigation.navigate("Location", {
                 setlocation: setLocation,
               });

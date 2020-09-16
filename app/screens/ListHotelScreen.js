@@ -180,12 +180,12 @@ export default function ListHotelScreen(props) {
               style={ListHotelStyle.MapView}
               initialRegion={{
                 latitude:
-                  currentLocation !== null
-                    ? currentLocation.latitude
+                searchParams.location !== null
+                    ? searchParams.location.latitude
                     : 21.0021622,
                 longitude:
-                  currentLocation !== null
-                    ? currentLocation.longitude
+                searchParams.location !== null
+                    ? searchParams.location.longitude
                     : 105.8056478,
                 latitudeDelta: 0.1,
                 longitudeDelta: 0.1,

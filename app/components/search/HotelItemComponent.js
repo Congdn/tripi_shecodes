@@ -19,8 +19,7 @@ export default function HotelItem(props) {
     <TouchableOpacity
       onPress={() => {
         if(typeof(props.setReload) !== "undefined" && typeof(props.reload) !== "undefined"){
-          setReload(!props.reload);
-          return;
+          props.setReload(!props.reload);
         }
         props.nav.navigate("Hotel", {
           hotel_id: props.hotel.hotel_id

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Linking,
-  Alert,
+  Alert, AsyncStorage
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import {
@@ -32,10 +32,11 @@ export default function HotelScreen(props) {
   const [reload, setReload] = React.useState(false);
 
   React.useEffect(() => {
+    setHotel(null);
     const currentDate = new Date();
     const tomorrow = currentDate.setDate(currentDate.getDate() + 1);
     (async () => {
-      fetch(
+      await fetch(
         `${Config.API_DOMAIN}/hotels/search?hotel-id=${
           routeParams.hotel_id
         }&num-adults=1&num-children=0&checkin-date=${Helper.formatDate(
@@ -46,6 +47,7 @@ export default function HotelScreen(props) {
         .then((res) => {
           if (res["status-code"] === 200) {
             setHotel(res.data);
+            AsyncStorage.setItem("hotels_recomend",res.data["related-hotels"]["paginated-hotels"]);
           }
           else if(res["status-code"] === 400){
             Alert.alert("Thông báo","Không tìm thấy thông tin khách sạn");
@@ -53,7 +55,7 @@ export default function HotelScreen(props) {
         })
         .catch((error) => {console.log(error); Alert.alert("Thông báo", "Lỗi khi gọi server");});
     })();
-  }, []);
+  }, [reload]);
   return hotel === null ? (
     <ActivityIndicator size="large" />
   ) : (
