@@ -14,11 +14,11 @@ import * as Config from "../config/AppConfig";
 
 const nearPaging = {
     pageindex: 1,
-    pagesize: 5,
+    pagesize: 8,
 };
 const watchPaging = {
     pageindex: 1,
-    pagesize: 5,
+    pagesize: 8,
 };
 export default function HomeScreen(props) {
     /* const dispatch = useDispatch();

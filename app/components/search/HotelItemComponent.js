@@ -6,19 +6,53 @@ import Colors from "../../commons/Colors";
 import MainStyle from "../../stylesheets/MainStyle";
 import ListHotelStyle from "../../stylesheets/ListHotelStyle";
 import * as Helper from "../../commons/Helper";
+import * as Config from "../../config/AppConfig";
 
 export default function HotelItem(props) {
-  const [supplier, setSupplier] = React.useState();
-  const price = Helper.numberTocurrency(Helper.getRandomInt(100000,5000000));
+  //const [supplier, setSupplier] = React.useState();
+  const [hotelImage, setHotelImage] = React.useState(null);
+
+  const price = Helper.numberTocurrency(Helper.getRandomInt(100000, 5000000));
   const star =
     typeof props.hotel.star_number === "undefined"
       ? 0
       : Number(props.hotel.star_number);
-  //console.log(props);
+  React.useEffect(() => {
+    //let res = "https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg";
+    if (props.hotel.url) {
+      (async () => {
+        let header = new Headers();
+        header.append("Content-Type", "application/x-www-form-urlencoded");
+
+        await fetch(Config.IMAGE_DOMAIN + "/api/system/get_hotel_image", {
+          method: 'POST',
+          body: "api-key=congdn&hotelurl=" + props.hotel.url,
+          headers: header,
+          redirect: 'follow'
+        })
+          .then(response => response.json())
+          .then(result => {
+            //console.log(result);
+            if (result.status && result.data.length > 0) {
+              setHotelImage(result.data[0]);
+            }
+          })
+          .catch(error => {
+            setHotelImage("https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg");
+            console.log('error', error);
+          });
+      })();
+    }
+    else {
+      setHotelImage("https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg");
+    }
+  }, [])
+
+
   return (
     <TouchableOpacity
       onPress={() => {
-        if(typeof(props.setReload) !== "undefined" && typeof(props.reload) !== "undefined"){
+        if (typeof (props.setReload) !== "undefined" && typeof (props.reload) !== "undefined") {
           props.setReload(!props.reload);
         }
         props.nav.navigate("Hotel", {
@@ -31,7 +65,7 @@ export default function HotelItem(props) {
     >
       <Image
         style={ListHotelStyle.ItemImage}
-        source={require("../../assets/images/eCEL3q.jpg")}
+        source={{uri:hotelImage}}
       />
       <View style={ListHotelStyle.ItemContent}>
         <Text style={ListHotelStyle.ItemTitle}>{props.hotel.name}</Text>
@@ -70,12 +104,12 @@ export default function HotelItem(props) {
               <Text style={{ color: Colors.Medium }}>Nhà cung cấp</Text>
               <TouchableOpacity
                 onPress={() => {
-                  props.nav.navigate("Supplier",{
+                  props.nav.navigate("Supplier", {
                     hotel_id: props.hotel.hotel_id ? props.hotel.hotel_id : props.hotel.id,
-                    supplierName:props.hotel.domain_name,
+                    supplierName: props.hotel.domain_name,
                     hotelName: props.hotel.name,
                     price: price,
-                    randomSuplier: Helper.getRandomInt(1,5)
+                    randomSuplier: Helper.getRandomInt(1, 5)
                   });
                 }}
                 style={ListHotelStyle.ItemSupplierDropBox}

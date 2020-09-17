@@ -7,7 +7,7 @@ import {
   FlatList,
   ScrollView,
   Dimensions,
-  ActivityIndicator,
+  ActivityIndicator, Alert
 } from "react-native";
 import { FontAwesome, Feather, FontAwesome5 } from "@expo/vector-icons";
 import Colors from "../commons/Colors";
@@ -19,13 +19,13 @@ import MainStyle from "../stylesheets/MainStyle";
 import ListHotelStyle from "../stylesheets/ListHotelStyle";
 
 import HotelItem from "../components/search/HotelItemComponent";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Callout } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Config from "../config/AppConfig";
 import * as Helper from "../commons/Helper";
 
 let paging = {
-  pageIndex: 1, 
+  pageIndex: 1,
   pageSize: 6
 }
 export default function ListHotelScreen(props) {
@@ -65,7 +65,7 @@ export default function ListHotelScreen(props) {
             //console.log(hotels);
           }
         })
-        .catch((error) => 
+        .catch((error) =>
           console.log(error)
         );
     })();
@@ -154,72 +154,87 @@ export default function ListHotelScreen(props) {
       {hotels.length === 0 ? (
         <ActivityIndicator size="large" />
       ) : (
-        <View>
-          {listType === "List" && (
-            <FlatList
-              data={hotels}
-              //extraData={loadingMore}
-              style={{ marginTop: 10, marginBottom: 52 }}
-              showsVerticalScrollIndicator={false}
-              onEndReachedThreshold={0.4}
-              onEndReached={() => loadMoreHandle()}
-              keyExtractor={(item)=>item.id.toString()}
-              ListFooterComponent={renderFooter(true)}
-              renderItem={({ item }) => (
-                <HotelItem
-                  nav={props.navigation}
-                  hotel={item}
-                  defaultAddress={searchParams.location}
-                ></HotelItem>
-              )}
-            ></FlatList>
-          )}
+          <View>
+            {listType === "List" && (
+              <FlatList
+                data={hotels}
+                //extraData={loadingMore}
+                style={{ marginTop: 10, marginBottom: 52 }}
+                showsVerticalScrollIndicator={false}
+                onEndReachedThreshold={0.4}
+                onEndReached={() => loadMoreHandle()}
+                keyExtractor={(item) => item.id.toString()}
+                ListFooterComponent={renderFooter(true)}
+                renderItem={({ item }) => (
+                  <HotelItem
+                    nav={props.navigation}
+                    hotel={item}
+                    defaultAddress={searchParams.location}
+                  ></HotelItem>
+                )}
+              ></FlatList>
+            )}
 
-          {listType === "Map" && (
-            <MapView
-              style={ListHotelStyle.MapView}
-              initialRegion={{
-                latitude:
-                searchParams.location !== null
-                    ? searchParams.location.latitude
-                    : 21.0021622,
-                longitude:
-                searchParams.location !== null
-                    ? searchParams.location.longitude
-                    : 105.8056478,
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1,
-              }}
-            >
-              <Marker
-                key={0}
-                coordinate={{
+            {listType === "Map" && (
+              <MapView
+                style={ListHotelStyle.MapView}
+                initialRegion={{
                   latitude:
-                    currentLocation !== null
-                      ? currentLocation.latitude
+                    searchParams.location !== null
+                      ? searchParams.location.latitude
                       : 21.0021622,
                   longitude:
-                    currentLocation !== null
-                      ? currentLocation.longitude
+                    searchParams.location !== null
+                      ? searchParams.location.longitude
                       : 105.8056478,
+                  latitudeDelta: 0.1,
+                  longitudeDelta: 0.1,
                 }}
-                title="Vị trí của bạn"
-              ></Marker>
-              {hotels.map((hotel, i) =>  (
+              >
                 <Marker
-                  key={hotel.id}
+                  key={0}
                   coordinate={{
-                    latitude: hotel.latitude ? Number(hotel.latitude) : 0,
-                    longitude: hotel.longitude ? Number(hotel.longitude) : 0,
+                    latitude:
+                      currentLocation !== null
+                        ? currentLocation.latitude
+                        : 21.0021622,
+                    longitude:
+                      currentLocation !== null
+                        ? currentLocation.longitude
+                        : 105.8056478,
                   }}
-                  title={hotel.name}
-                  description={hotel.description}
+                  title="Vị trí của bạn"
                 ></Marker>
-              ))}
-            </MapView>
-          )}
-        </View>
-      )}
+                {hotels.map((hotel, i) => (
+                  <Marker
+                    key={hotel.id}
+                    coordinate={{
+                      latitude: hotel.latitude ? Number(hotel.latitude) : 0,
+                      longitude: hotel.longitude ? Number(hotel.longitude) : 0,
+                    }}
+                    title={hotel.name}
+                  //description={hotel.description}
+                  >
+                    <Callout
+                      onPress={() => props.navigation.navigate("Hotel", {
+                        hotel_id: hotel.hotel_id
+                          ? hotel.hotel_id
+                          : hotel.id,
+                      })}
+                    >
+                      <View style={{
+                        width: 200,
+                      }}>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{hotel.name}</Text>
+                        <Text>{hotel.description ? hotel.description.substring(0, hotel.description.indexOf(".")).trim() : ""}</Text>
+                      </View>
+                    </Callout>
+                  </Marker>
+                ))}
+              </MapView>
+            )}
+          </View>
+        )}
 
       <RBSheet ref={refSortRBSheet} height={180}>
         <View style={ListHotelStyle.Popup}>

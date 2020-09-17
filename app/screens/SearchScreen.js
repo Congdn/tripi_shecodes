@@ -19,7 +19,7 @@ import { Search_AddAction } from "../redux/actions/SearchAction";
 
 export default function SearchScreen(props) {
   const dispatch = useDispatch();
-  const routeParams = props.route.params;
+  //const routeParams = props.route.params;
 
   const [location, setLocation] = React.useState(null);
   const [fromDateTitle, setFromDateTitle] = React.useState("");
@@ -75,7 +75,7 @@ export default function SearchScreen(props) {
               //console.log(props);
               dispatch(Search_AddAction(""));
               props.navigation.navigate("Location", {
-                setlocation: setLocation,
+                setupLocation: setLocation,
               });
             }}
             style={SearchStyle.btnSelect}
@@ -257,8 +257,8 @@ export default function SearchScreen(props) {
             props.navigation.navigate("ListHotel",{
               location:location,
               dateRange:{
-                fromDate: fromDateTitle !== "" ? Moment(sDate).format("yyyyMMDD") : "",
-                toDate: toDateTitle !== "" ? Moment(eDate).format("yyyyMMDD") : ""
+                fromDate: fromDateTitle !== "" ? Moment(sDate).format("yyyyMMDD") : Moment(new Date()).format("yyyyMMDD"),
+                toDate: toDateTitle !== "" ? Moment(eDate).format("yyyyMMDD") : Moment(new Date()).format("yyyyMMDD")
               },
               numberOfPerson:{
                 adult:adultsQuatity,

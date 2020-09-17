@@ -24,6 +24,7 @@ import Colors from "../commons/Colors";
 import * as Config from "../config/AppConfig";
 import * as Helper from "../commons/Helper";
 import HotelItem from "../components/search/HotelItemComponent";
+import HotelCarousel from "../components/hotel/HotelCarousel";
 
 export default function HotelScreen(props) {
   const routeParams = props.route.params;
@@ -61,10 +62,11 @@ export default function HotelScreen(props) {
   ) : (
     <View>
       <ScrollView style={HotelStyle.Container}>
-        <Image
+        <HotelCarousel url={hotel["basic-info"].url}></HotelCarousel>
+        {/* <Image
           style={HotelStyle.Avatar}
           source={require("../assets/images/1407953244000-177513283.jpg")}
-        />
+        /> */}
         <View style={MainStyle.Container}>
           <Text style={MainStyle.H3}>{hotel["basic-info"].name}</Text>
           {hotel["additional-info"] !== null && (

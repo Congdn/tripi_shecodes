@@ -13,11 +13,10 @@ export default function HotelBox(props) {
     //let pageindex = props.paging.pageindex + 1;
     props.setPaging = {
       pageIndex:props.setPaging.pageindex++,
-      pageSize:5
+      pageSize:8
     }
     props.renderdata();
   }
-
   return (
     <View style={HomeStyle.HotelBox}>
       <Text style={HomeStyle.BoxTitle}>{props.title}</Text>
@@ -37,6 +36,7 @@ export default function HotelBox(props) {
             name={entry.item.name}
             description={entry.item.description}
             nav={props.nav}
+            url={entry.item.url}
             //images={entry.item["hotel-imgs"]}
           ></HotelItem>
         )}

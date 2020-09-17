@@ -114,7 +114,7 @@ export default function LocationScreen(props) {
                           latitude: item.latitude,
                           longitude: item.longitude,
                         };
-                        routeParams.setlocation(locationToSet);
+                        routeParams.setupLocation(locationToSet);
                         async () => {
                           const locations_history = await AsyncStorage.getItem(
                             "location_history"
@@ -181,7 +181,7 @@ export default function LocationScreen(props) {
           { flexDirection: "row", alignItems: "center" },
         ]}
         onPress={() => {
-          routeParams.setlocation(geoLocation);
+          routeParams.setupLocation(geoLocation);
           async () => {
             const locations_history = await AsyncStorage.getItem(
               "location_history"
