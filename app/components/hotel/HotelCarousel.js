@@ -24,11 +24,20 @@ export default function HotelCarousel(props) {
           body: "api-key=congdn&hotelurl=" + props.url,
           headers: header,
           redirect: 'follow'
-        })
+        },null,3000)
           .then(response => response.json())
           .then(result => {
             if (result.status && result.data.length > 0) {
               setHotelImages(result.data);
+            }
+            else {
+              setHotelImages([
+                'https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg',
+                'https://storage.googleapis.com/static-content-hc/sites/default/files/cataloina_porto_doble_balcon2_2.jpg',
+                'https://cf.bstatic.com/images/hotel/max1024x768/681/68184730.jpg',
+                'https://media.fitzwilliamhotelbelfast.com/production/wp-content/uploads/2019/11/13150738/Penthouse.jpg',
+                'https://www.gingerhotels.com/resourcefiles/hotelprofile/ginger-vapi-hotel-th.jpg',
+                'https://www.thestudenthotel.com/498306/globalassets/01.-homepage/images/tsh-experience/design/small/the_student_hotel_rooftop_pool_in_the_sunshine.jpg']);
             }
           })
           .catch(error => console.log('error', error));
@@ -39,20 +48,20 @@ export default function HotelCarousel(props) {
   return hotelImages.length > 0 ? (
     <View>
       <Carousel
-      layout="stack"
-      ref={carousel}
-      data={hotelImages}
-      onSnapToItem={(index) => setActiveSlide(index) }
-      renderItem={({ item, index }) => {
-        return (
-          <View>
-            <Image source={{ uri: item }} style={{ height: 260 }} />
-          </View>
-        )
-      }}
-      sliderWidth={windowWidth}
-      itemWidth={windowWidth - 40}
-    />
+        layout="stack"
+        ref={carousel}
+        data={hotelImages}
+        onSnapToItem={(index) => setActiveSlide(index)}
+        renderItem={({ item, index }) => {
+          return (
+            <View>
+              <Image source={{ uri: item }} style={{ height: 260 }} />
+            </View>
+          )
+        }}
+        sliderWidth={windowWidth}
+        itemWidth={windowWidth - 40}
+      />
       {/* <Pagination
         dotsLength={hotelImages.length}
         activeDotIndex={activeSlide}

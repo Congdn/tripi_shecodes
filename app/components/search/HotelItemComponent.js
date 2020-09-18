@@ -13,10 +13,17 @@ export default function HotelItem(props) {
   const [hotelImage, setHotelImage] = React.useState(null);
 
   const price = Helper.numberTocurrency(Helper.getRandomInt(100000, 5000000));
-  const star =
-    typeof props.hotel.star_number === "undefined"
+  let star =
+    typeof (props.hotel.star_number) === "undefined"
       ? 0
       : Number(props.hotel.star_number);
+  if (star == 0) {
+    star = typeof (props.hotel.star) === "undefined"
+      ? 0 : Number(props.hotel.star)
+  }
+  const num_review = typeof (props.hotel.num_reviews) === "undefined"
+    ? 0
+    : Number(props.hotel.num_reviews);
   React.useEffect(() => {
     //let res = "https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg";
     if (props.hotel.url) {
@@ -33,8 +40,12 @@ export default function HotelItem(props) {
           .then(response => response.json())
           .then(result => {
             //console.log(result);
-            if (result.status && result.data.length > 0) {
+            if (result.status && result.data) {
               setHotelImage(result.data[0]);
+            }
+            else{
+              //console.log("test");
+              setHotelImage('https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg')
             }
           })
           .catch(error => {
@@ -65,7 +76,7 @@ export default function HotelItem(props) {
     >
       <Image
         style={ListHotelStyle.ItemImage}
-        source={{uri:hotelImage}}
+        source={{ uri: hotelImage }}
       />
       <View style={ListHotelStyle.ItemContent}>
         <Text style={ListHotelStyle.ItemTitle}>{props.hotel.name}</Text>
@@ -93,7 +104,7 @@ export default function HotelItem(props) {
           {star > 4 ? (
             <FontAwesome name="star" size={12} color={Colors.Secondary} />
           ) : null}
-          <Text style={ListHotelStyle.ItemReviewPoint}>(3k)</Text>
+          <Text style={ListHotelStyle.ItemReviewPoint}>({num_review})</Text>
           <Text style={[MainStyle.WhiteText, ListHotelStyle.ItemAverage]}>
             9.5
           </Text>

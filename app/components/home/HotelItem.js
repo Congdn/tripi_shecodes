@@ -30,6 +30,9 @@ export default function HotelItem(props) {
             if (result.status && result.data.length > 0) {
               setHotelImage(result.data[0]);
             }
+            else{
+              setHotelImage("https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg");
+            }
           })
           .catch(error => {
             setHotelImage("https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg");

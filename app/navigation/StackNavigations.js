@@ -79,12 +79,14 @@ export function HomeTab() {
             paddingVertical: 4,
             borderRadius: 10
           }}
-          /* onChange={value=>{
-            setCurrentKeyword(value.nativeEvent.text);
-          }} */
-          onEndEditing={value=>{
+          /* onEndEditing={value=>{
             if(keyword === value.nativeEvent.text) return;
             const addAction = Search_AddAction(value.nativeEvent.text);
+            store.dispatch(addAction);          }} */
+          onChangeText={value=>{
+            //console.log(value);
+            if(keyword === value) return;
+            const addAction = Search_AddAction(value);
             store.dispatch(addAction);
           }}
           //value={keyword}

@@ -33,13 +33,13 @@ const ListHotelStyle = StyleSheet.create({
     HotelItemBox:{
         marginTop:10,
         borderRadius:10,
-        maxHeight:140,
+        maxHeight:170,
         backgroundColor:Colors.White,
         flexDirection:'row'
     },
     ItemImage:{
-        width:100,
-        height:140,
+        width:'26%',
+        height:'100%',
         borderTopLeftRadius:10,
         borderBottomLeftRadius:10
     },
@@ -48,7 +48,8 @@ const ListHotelStyle = StyleSheet.create({
     },
     ItemTitle:{
         fontSize:20,
-        fontWeight:'bold'
+        fontWeight:'bold',
+        width:'70%'
     },
     ItemLocationBox:{
         flexDirection:'row',
@@ -56,7 +57,8 @@ const ListHotelStyle = StyleSheet.create({
     },
     ItemLocationText:{
         fontSize:10,
-        marginLeft:2
+        marginLeft:2,
+        width:'80%'
     },
     ItemScopeBox:{
         flexDirection:'row',
