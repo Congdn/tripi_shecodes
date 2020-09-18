@@ -25,9 +25,12 @@ import * as Helper from "../commons/Helper";
 import HotelItem from "../components/search/HotelItemComponent";
 import HotelCarousel from "../components/hotel/HotelCarousel";
 import HTMLView from 'react-native-htmlview';
+import {useDispatch} from 'react-redux';
+import {Home_RecomendAction} from "../redux/actions/HomeAction";
 
 export default function HotelScreen(props) {
   const routeParams = props.route.params;
+  const dispath = useDispatch();
 
   const [hotel, setHotel] = React.useState(null);
   const [reload, setReload] = React.useState(false);
@@ -36,7 +39,7 @@ export default function HotelScreen(props) {
     setHotel(null);
     const currentDate = new Date();
     const tomorrow = currentDate.setDate(currentDate.getDate() + 1);
-    console.log(routeParams.hotel_id);
+    //console.log(routeParams.hotel_id);
     (async () => {
       await fetch(
         `${Config.API_DOMAIN}/hotels/search?hotel-id=${routeParams.hotel_id
@@ -48,7 +51,11 @@ export default function HotelScreen(props) {
         .then((res) => {
           if (res["status-code"] === 200) {
             setHotel(res.data);
-            AsyncStorage.setItem("hotels_recomend", res.data["related-hotels"]["paginated-hotels"]);
+            
+            if(res.data["related-hotels"]["paginated-hotels"])
+              dispath(Home_RecomendAction(res.data["related-hotels"]["paginated-hotels"]));
+            /* AsyncStorage.setItem("hotels_recomend", res.data["related-hotels"]["paginated-hotels"]); */
+
           }
           else if (res["status-code"] === 400) {
             Alert.alert("Thông báo", "Không tìm thấy thông tin khách sạn");

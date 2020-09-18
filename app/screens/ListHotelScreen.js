@@ -7,7 +7,7 @@ import {
   FlatList,
   ScrollView,
   Dimensions,
-  ActivityIndicator, Alert
+  ActivityIndicator, Alert, Image
 } from "react-native";
 import { FontAwesome, Feather, FontAwesome5 } from "@expo/vector-icons";
 import Colors from "../commons/Colors";
@@ -187,8 +187,8 @@ export default function ListHotelScreen(props) {
                     searchParams.location !== null
                       ? searchParams.location.longitude
                       : 105.8056478,
-                  latitudeDelta: 0.1,
-                  longitudeDelta: 0.1,
+                  latitudeDelta: 0.5,
+                  longitudeDelta: 0.5,
                 }}
               >
                 <Marker
@@ -204,7 +204,9 @@ export default function ListHotelScreen(props) {
                         : 105.8056478,
                   }}
                   title="Vị trí của bạn"
-                ></Marker>
+                >
+                  <Image source={{uri:'https://www.iconfinder.com/data/icons/social-messaging-ui-color/254000/66-512.png',width:40,height:60}} />
+                </Marker>
                 {hotels.map((hotel, i) => (
                   <Marker
                     key={hotel.id}

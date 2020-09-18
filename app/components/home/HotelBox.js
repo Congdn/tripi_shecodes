@@ -6,11 +6,13 @@ import HotelItem from "./HotelItem";
 export default function HotelBox(props) {
 
   const renderFooter = (status) => {
+    if(props.homeScreen) return null;
     return status ? <ActivityIndicator size="large" style={{marginTop:70}} /> : null
   }
 
   const loadMoreHandle = ()=>{
     //let pageindex = props.paging.pageindex + 1;
+    if(props.homeScreen) return null;
     props.setPaging = {
       pageIndex:props.setPaging.pageindex++,
       pageSize:8

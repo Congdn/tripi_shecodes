@@ -19,7 +19,7 @@ export default function HotelCarousel(props) {
         let header = new Headers();
         header.append("Content-Type", "application/x-www-form-urlencoded");
 
-        await fetch(Config.IMAGE_DOMAIN + "/api/system/get_hotel_image", {
+        await fetch(Config.IMAGE_DOMAIN + "/api/common/get_hotel_image", {
           method: 'POST',
           body: "api-key=congdn&hotelurl=" + props.url,
           headers: header,

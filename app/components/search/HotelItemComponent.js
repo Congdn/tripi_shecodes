@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, Picker, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { FontAwesome, EvilIcons, MaterialIcons } from "@expo/vector-icons";
 
 import Colors from "../../commons/Colors";
@@ -31,7 +31,7 @@ export default function HotelItem(props) {
         let header = new Headers();
         header.append("Content-Type", "application/x-www-form-urlencoded");
 
-        await fetch(Config.IMAGE_DOMAIN + "/api/system/get_hotel_image", {
+        await fetch(Config.IMAGE_DOMAIN + "/api/common/get_hotel_image", {
           method: 'POST',
           body: "api-key=congdn&hotelurl=" + props.hotel.url,
           headers: header,

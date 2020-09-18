@@ -18,7 +18,7 @@ export default function HotelItem(props) {
         let header = new Headers();
         header.append("Content-Type", "application/x-www-form-urlencoded");
 
-        await fetch(Config.IMAGE_DOMAIN + "/api/system/get_hotel_image", {
+        await fetch(Config.IMAGE_DOMAIN + "/api/common/get_hotel_image", {
           method: 'POST',
           body: "api-key=congdn&hotelurl=" + props.url,
           headers: header,
@@ -26,7 +26,7 @@ export default function HotelItem(props) {
         })
           .then(response => response.json())
           .then(result => {
-            //console.log(result);
+            //console.log(props.url);
             if (result.status && result.data.length > 0) {
               setHotelImage(result.data[0]);
             }

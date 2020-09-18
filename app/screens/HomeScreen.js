@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     ScrollView,
     ActivityIndicator,
@@ -26,6 +26,7 @@ export default function HomeScreen(props) {
           const logout = LogoutAction();
           dispatch(logout);
       } */
+    const hotelRecomend = useSelector((state) => state.homeReducer.recomendHotels);
     const [nearHotels, setNearHotels] = React.useState([]);
     /* const [nearPaging, setNearPaging] = React.useState({
       pageindex: 1,
@@ -77,11 +78,11 @@ export default function HomeScreen(props) {
             //
 
             //recomend 
-            AsyncStorage.getItem("hotels_recomend").then((response=>{
+            /* await AsyncStorage.getItem("hotels_recomend").then((response => {
                 if (response != null) {
                     setRecomendHotels(response);
                 }
-            }));
+            })); */
             //
         })();
     }
@@ -96,12 +97,13 @@ export default function HomeScreen(props) {
             <ScrollView style={MainStyle.BackgroundMainColor}>
                 <UserInfo />
 
-                {recomendHotels.length > 0 ? <HotelBox
-                    DATA={forUserHotels}
+                {hotelRecomend.length > 0 ? <HotelBox
+                    DATA={hotelRecomend}
                     title="Dành cho bạn"
                     nav={props.navigation}
+                    homeScreen={true}
                 ></HotelBox> : null}
-                
+
                 {watchHotels.length === 0 ? (
                     <ActivityIndicator size="large" />
                 ) : (
